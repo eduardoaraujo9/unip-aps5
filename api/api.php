@@ -9,9 +9,14 @@
  *                                                                            *
  ******************************************************************************/
 
+include "dao.php";
+
 echo "tipo:" . $_GET['tipo'];
 echo " id:" . $_GET['id'];
 
+$DAO = new DAO();
+
+//echo "db: " . $base->getServer();
 
 
 ?>

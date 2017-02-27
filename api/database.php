@@ -7,6 +7,20 @@ class sql {
   private $username = "chatapi";
   private $password = "ipatahc";
 
+  private $conn;
+
+  function conectar(){
+    $conn = mysqli($server, $username, $password, $database, $port);
+  }
+
+  function setServer($ip){
+    $this->server=$ip;
+  }
+  function getServer(){
+    return $this->server;
+  }
+
+
 }
 
 
