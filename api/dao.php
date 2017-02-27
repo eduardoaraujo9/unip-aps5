@@ -2,13 +2,14 @@
 
 /* Data Access Object (DAO) */
 
-include "database.php";
+include "sql.php";
 
 class DAO {
-  private $db = new sql();
+  private $db;
 
   function __construct() {
-    $db->conectar;
+    $this->db = new sql();
+    $this->db->conectar;
   }
 
   function salvarCliente($obj) {
