@@ -19,7 +19,7 @@ class Cliente {
 
   function validar(){
     $retorno->access_token = "ok";
-    $retorno->message = "acesso concedido";
+// if not:    $retorno=Erro("senha errada");
     return $retorno;
   }
 }

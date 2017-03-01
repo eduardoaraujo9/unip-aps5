@@ -26,7 +26,7 @@ echo " id:" . $_GET['id'];
 
 /* Login */
 
-if(count($_POST)>0 && $_GET['tipo']=="login"){
+if($_GET['tipo']=="login" && count($_POST)>0){
   $cliente = new Cliente();
   $cliente->email = $_POST['email'];
   $cliente->senha = $_POST['senha'];
@@ -35,7 +35,7 @@ if(count($_POST)>0 && $_GET['tipo']=="login"){
 
 
 /* Retorna os dados de acordo com o request do cliente */
-
+if(count($retorno)==0){$retorno=Erro();}
 switch (getContentType()){
 	case 'application/xml':
 		returnXML(); break;
