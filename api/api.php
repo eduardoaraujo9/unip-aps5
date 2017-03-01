@@ -9,12 +9,11 @@
  *                                                                            *
  ******************************************************************************/
 
-include "dao.php";
 include "classes.php";
 include "functions.php";
 
+/* Inicio */
 
-/* inicio */
 /* if(count($_GET)==0){ echo "acessou / raiz"; }
 
 /*
@@ -23,18 +22,20 @@ echo " tipo:" . $_GET['tipo'];
 echo " id:" . $_GET['id'];
 */
 
-$DAO = new DAO();
+//$DAO = new DAO();
 
 /* Login */
 
 if(count($_POST)>0 && $_GET['tipo']=="login"){
   $cliente = new Cliente();
-  $cliente->email=$_POST['email'];
-  $cliente->senha=$_POST['senha'];
+  $cliente->email = $_POST['email'];
+  $cliente->senha = $_POST['senha'];
   $retorno = $cliente->validar();
 }
 
-// retorna os dados de acordo com o request do cliente
+
+/* Retorna os dados de acordo com o request do cliente */
+
 switch (getContentType()){
 	case 'application/xml':
 		returnXML(); break;
