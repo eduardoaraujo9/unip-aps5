@@ -36,6 +36,9 @@ if($_GET['tipo']=="login" && count($_POST)>0){
 
 /* Retorna os dados de acordo com o request do cliente */
 if(count($retorno)==0){$retorno=Erro();}
+if(isset($retorno->code)){header("HTTP/1.1 " . $retorno->code . " " . $retorno->desc);}
+else{header("HTTP/1.1 200 OK");}
+
 switch (getContentType()){
 	case 'application/xml':
 		returnXML(); break;
