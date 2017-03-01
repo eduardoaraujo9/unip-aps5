@@ -10,6 +10,7 @@
  ******************************************************************************/
 
 include "dao.php";
+include "classes.php";
 
 echo "tipo:" . $_GET['tipo'];
 echo " id:" . $_GET['id'];
