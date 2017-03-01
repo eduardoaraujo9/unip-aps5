@@ -16,6 +16,12 @@ class Cliente {
   public $email;
   public $senha;
   public $lastupdate;
+
+  function validar(){
+    $retorno->access_token = "ok";
+    $retorno->message = "acesso concedido";
+    return $retorno;
+  }
 }
 
 class Config {

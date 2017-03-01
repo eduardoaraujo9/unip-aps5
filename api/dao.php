@@ -36,6 +36,10 @@ class DAO {
 
   }
 
+  function validarToken($obj) {
+
+  }
+
 }
 
 ?>
