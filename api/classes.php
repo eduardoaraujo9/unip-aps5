@@ -18,7 +18,7 @@ class Cliente {
   public $lastupdate;
 
   function validar(){
-    $retorno->access_token = "ok";
+    $retorno->access_token = "ok:".$this->email;
     //if not: $retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
     return $retorno;
   }

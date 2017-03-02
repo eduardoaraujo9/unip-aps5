@@ -26,10 +26,11 @@ echo " id:" . $_GET['id'];
 
 /* Login */
 
-if($_GET['tipo']=="login" && count($_POST)>0){
+if($_GET['tipo']=="login"){
   $cliente = new Cliente();
-  $cliente->email = $_POST['email'];
-  $cliente->senha = $_POST['senha'];
+  $input=converterInput();
+  $cliente->email=$input->email;
+  $cliente->senha=$input->senha;
   $retorno = $cliente->validar();
 }
 
@@ -38,15 +39,14 @@ if($_GET['tipo']=="login" && count($_POST)>0){
 if(count($retorno)==0){$retorno=Erro();}
 if(isset($retorno->code)){header("HTTP/1.1 " . $retorno->code . " " . $retorno->desc);}
 else{header("HTTP/1.1 200 OK");}
-
 switch (getContentType()){
-	case 'application/xml':
-		returnXML(); break;
-	case 'text/html':
-		returnHTML(); break;
-	case 'text/plain':
-		returnText(); break;
-	default: returnJson();
+  case 'application/xml':
+    returnXML(); break;
+  case 'text/html':
+    returnHTML(); break;
+  case 'text/plain':
+    returnText(); break;
+  default: returnJson();
 }
 exit; // fim
 

@@ -15,6 +15,19 @@ function Erro($mensagem = "Requisicao invalida ou em formato errado para essa AP
   return $erro;
 }
 
+function converterInput(){
+  if(count($_POST)>0){
+    $input = json_encode($_POST);
+  }else{
+    $input = file_get_contents("php://input");
+    switch (headerPrecedence($_SERVER['CONTENT_TYPE'])){
+      case 'application/xml':
+        $input = json_encode(xmlToArray($input));
+    }
+  }
+  return json_decode($input,FALSE);
+}
+
 function getContentType(){ // padrão retornar json
 	if (isset($_GET['alt'])) {
 		switch (strtolower($_GET['alt'])) {
@@ -151,6 +164,10 @@ function arrayToXml( $retorno, &$xml_data ) {
             $xml_data->addChild("$key",htmlspecialchars("$value"));
         }
      }
+}
+// function to convert xml to array
+function xmlToArray($input){
+	return (array) simplexml_load_string($input);
 }
 
 ?>
