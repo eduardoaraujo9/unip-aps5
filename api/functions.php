@@ -1,5 +1,7 @@
 <?php
 
+/* codigo re-aproveitado da api demonstrativa em http://dev.mundoapi.com.br */
+
 $produces = array("application/json", "application/xml", "text/plain", "text/html");
 
 function Erro($mensagem = "Requisicao invalida ou em formato errado para essa API.", $codigo = 400, $desc="Bad Request", $arg = ""){
@@ -73,16 +75,31 @@ function headerPrecedence($header){
 	}
 	foreach ($lista as $key => $peso){ if (in_array($key, $produces)){return $key;} }	
 }
+
+function responder($retorno){
+
+  if(count($retorno)==0){$retorno=Erro();}
+  if(isset($retorno->code)){header("HTTP/1.1 " . $retorno->code . " " . $retorno->desc);}
+  else{header("HTTP/1.1 200 OK");}
+  switch (getContentType()){
+    case 'application/xml':
+      returnXML($retorno); break;
+    case 'text/html':
+      returnHTML($retorno); break;
+    case 'text/plain':
+      returnText($retorno); break;
+    default: returnJson($retorno);
+  }
+
+}
 // retornos
-function returnXML(){
-	global $retorno;
+function returnXML($retorno){
 	$xml_data = new SimpleXMLElement('<?xml version="1.0"?><root></root>');
 	arrayToXml($retorno, $xml_data);
 	header('Content-Type: application/xml');
 	print $xml_data->asXML();
 }
-function returnHTML(){
-	global $retorno;
+function returnHTML($retorno){
 	header('Content-Type: text/html');
 	echo "<html>"
 		. "<head>"
@@ -94,13 +111,11 @@ function returnHTML(){
 	    . "</body>"
 	  . "</html>";
 }
-function returnText(){
-	global $retorno;
+function returnText($retorno){
 	header('Content-Type: text/plain');
 	var_dump($retorno);
 }
-function returnJson(){
-	global $retorno;
+function returnJson($retorno){
 	header('Content-Type: application/json');
 	print json_encode($retorno);
 }

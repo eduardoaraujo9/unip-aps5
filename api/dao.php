@@ -12,6 +12,15 @@ class DAO {
     $this->db->conectar;
   }
 
+  function loginCliente($cliente) {
+    if($cliente->senha=="123"){
+      $retorno->access_token="ok:" . $cliente->email;
+    }else{
+      $retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
+    }
+    return $retorno;
+  }
+
   function salvarCliente($obj) {
 
   }

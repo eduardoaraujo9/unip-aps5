@@ -1,6 +1,6 @@
 <?php
 
-/* Prototipo das classes */
+include "dao.php";
 
 class Chat {
   public $id;
@@ -17,11 +17,28 @@ class Cliente {
   public $senha;
   public $lastupdate;
 
+  private $DAO;
+  function __construct() {
+    $this->DAO = new DAO();
+  }
+  
   function validar(){
-    $retorno->access_token = "ok:".$this->email;
-    //if not: $retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
+    if(strlen($this->email)>0){
+      $retorno = $this->DAO->loginCliente($this);
+    }else{
+      $retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
+    }
     return $retorno;
   }
+
+  function salvar(){
+    $this->DAO->salvarCliente($this);
+  }
+
+  function atualizou(){
+    $this->DAO->atualizarCliente($this);
+  }
+
 }
 
 class Config {
