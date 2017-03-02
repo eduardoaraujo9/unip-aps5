@@ -1,0 +1,117 @@
+swagger: '2.0'
+info:
+  title: API do Linux Virtual
+  description: >-
+    ## ![API Logo](/v1/doc/demoapi.png)<br><br>Expõe dados de funcionários de
+    forma segura.
+  version: '1.0'
+schemes:
+  - http
+basePath: /v1
+produces:
+  - application/json
+  - application/xml
+  - text/plain
+  - text/html
+paths:
+  /funcionarios:
+    get:
+      summary: Lista de funcionários
+      description: >
+        O recurso funcionários retorna uma lista com todos os funcionários
+        existentes.
+      parameters:
+        - name: id
+          in: query
+          description: ID do funcionário.
+          required: false
+          type: integer
+          format: int32
+      tags:
+        - Funcionarios
+      responses:
+        '200':
+          description: Matriz de funcionários
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Funcionarios'
+        default:
+          description: Erro inesperado
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - api_key: []
+  '/funcionarios/{id}':
+    get:
+      tags:
+        - Funcionarios
+      summary: Retorna dados de um funcionário.
+      description: Retorna dados de um funcionário.
+      produces:
+        - application/json
+        - application/xml
+        - text/plain
+        - text/html
+      parameters:
+        - name: id
+          in: path
+          description: ID do funcionário
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Matriz de funcionários
+          schema:
+            $ref: '#/definitions/Funcionario'
+        default:
+          description: Erro inesperado
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - api_key: []
+securityDefinitions:
+  api_key:
+    type: apiKey
+    description: usar a chave de api `test-key`
+    name: access_token
+    in: header
+definitions:
+  Funcionarios:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+        description: Código de identificação do funcionário.
+      nome:
+        type: string
+        description: Nome do funcionário.
+  Funcionario:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+        description: Código de identificação do funcionário.
+      nome:
+        type: string
+        description: Nome do funcionário.
+      telefone:
+        type: string
+        description: Telefone do funcionário.
+      cargo:
+        type: string
+        description: Cargo do funcionário.
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+

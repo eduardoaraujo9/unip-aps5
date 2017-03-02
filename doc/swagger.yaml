@@ -1,0 +1,197 @@
+swagger: '2.0'
+info:
+  title: API de Chat
+  description: >-
+    ## API desenvolvida como APS de Redes da UNIP no 5.o Semestre de Ciências da Computação (Jan/2017).
+  version: '0.1'
+  contact:
+    name: Eduardo Araujo
+    url: http://github.com/eduardoaraujo9
+schemes:
+  - http
+host: unip.nunes.net.br
+basePath: /CC5/APS/unip-aps5/api
+produces:
+  - application/json
+  - application/xml
+  - text/plain
+  - text/html
+paths:
+  /login:
+    post:
+      tags:
+        - Login
+      summary: Registra um usuário no sistema.
+      description: Valida o email e a senha de um usuário, recebe um token de acesso.
+      produces:
+        - application/json
+        - application/xml
+        - text/plain
+        - text/html
+      parameters:
+        - name: email
+          in: formData
+          description: email do usuario
+          required: true
+          type: string
+        - name: senha
+          in: formData
+          description: senha do usuario
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Token de Acesso
+          schema:
+            $ref: '#/definitions/AccessToken'
+        default:
+          description: Acesso Negado
+          schema:
+            $ref: '#/definitions/Error'
+  /mensagem:
+    post:
+      tags:
+        - Mensagem
+      summary: Registra um usuário no sistema.
+      description: Valida o email e a senha de um usuário, recebe um token de acesso.
+      produces:
+        - application/json
+        - application/xml
+        - text/plain
+        - text/html
+      parameters:
+        - name: id
+          in: formData
+          description: email do usuario
+          required: true
+          type: string
+        - name: msg
+          in: formData
+          description: senha do usuario
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Matriz de funcionários
+          schema:
+            $ref: '#/definitions/Funcionario'
+        default:
+          description: Erro inesperado
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - api_key: []
+    get:
+      tags:
+        - Mensagem
+      summary: Registra um usuário no sistema.
+      description: Valida o email e a senha de um usuário, recebe um token de acesso.
+      produces:
+        - application/json
+        - application/xml
+        - text/plain
+        - text/html
+      parameters:
+        - name: email
+          in: formData
+          description: email do usuario
+          required: true
+          type: string
+        - name: senha
+          in: formData
+          description: senha do usuario
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Matriz de funcionários
+          schema:
+            $ref: '#/definitions/Funcionario'
+        default:
+          description: Erro inesperado
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - api_key: []
+  /getter:
+    get:
+      tags:
+        - Get
+      summary: Registra um usuário no sistema.
+      description: Valida o email e a senha de um usuário, recebe um token de acesso.
+      produces:
+        - application/json
+        - application/xml
+        - text/plain
+        - text/html
+      parameters:
+        - name: get1
+          in: path
+          description: email do usuario
+          required: true
+          type: string
+        - name: get2
+          in: path
+          description: senha do usuario
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Matriz de funcionários
+          schema:
+            $ref: '#/definitions/Funcionario'
+        default:
+          description: Erro inesperado
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - api_key: []        
+securityDefinitions:
+  api_key:
+    type: apiKey
+    description: usar a chave de api `test-key`
+    name: access_token
+    in: header
+definitions:
+  AccessToken:
+    type: object
+    properties:
+      access_token:
+        type: string
+        description: Token de acesso à API.
+  Funcionarios:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+        description: Código de identificação do funcionário.
+      nome:
+        type: string
+        description: Nome do funcionário.
+  Funcionario:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+        description: Código de identificação do funcionário.
+      nome:
+        type: string
+        description: Nome do funcionário.
+      telefone:
+        type: string
+        description: Telefone do funcionário.
+      cargo:
+        type: string
+        description: Cargo do funcionário.
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
