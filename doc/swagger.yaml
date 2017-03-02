@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   title: API de Chat
   description: >-
-    ## API desenvolvida como APS de Redes da UNIP no 5.o Semestre de Ciências da Computação (Jan/2017).
+    ## API desenvolvida como APS de Redes da UNIP no 5.o Semestre de Ci&ecirc;ncias da Computa&ccedil;&atilde;o (Jan/2017).
   version: '0.1beta'
   contact:
     name: Eduardo Araujo
@@ -17,23 +17,25 @@ produces:
   - text/plain
   - text/html
 consumes:
+  - application/json
   - application/x-www-form-urlencoded
+  - application/xml
 paths:
   /login:
     post:
       tags:
         - Login
-      summary: Registra um usuário no sistema.
-      description: Valida o email e a senha de um usuário, recebe um token de acesso.
+      summary: Registra um usu&aacute;rio no sistema.
+      description: Valida o email e a senha de um usu&aacute;rio, recebe um token de acesso.
       parameters:
         - name: email
           in: formData
-          description: email do usuario
+          description: email do usu&aacute;rio
           required: true
           type: string
         - name: senha
           in: formData
-          description: senha do usuario
+          description: senha do usu&aacute;rio
           required: true
           type: string
           format: password
@@ -49,7 +51,7 @@ paths:
 securityDefinitions:
   access_token:
     type: apiKey
-    description: Chave identificadora do cliente, obtida agravés da `API de Login`
+    description: Chave identificadora do cliente, obtida atrav&eacute;s da `API de Login`
     name: access_token
     in: header
 definitions:
@@ -58,47 +60,20 @@ definitions:
     properties:
       access_token:
         type: string
-        description: Token de acesso à API.
-  Funcionarios:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-        description: Código de identificação do funcionário.
-      nome:
-        type: string
-        description: Nome do funcionário.
-  Funcionario:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int32
-        description: Código de identificação do funcionário.
-      nome:
-        type: string
-        description: Nome do funcionário.
-      telefone:
-        type: string
-        description: Telefone do funcionário.
-      cargo:
-        type: string
-        description: Cargo do funcionário.
+        description: Token de acesso &agrave; API.
   Error:
     type: object
     properties:
       code:
         type: integer
         format: int32
-        description: Código do erro.
+        description: C&oacute;digo do erro.
       desc:
         type: string
-        description: Descrição curta do erro.
+        description: Descri&ccedil;&atilde;o curta do erro.
       message:
         type: string
-        description: Descrição detalhada do erro.
+        description: Descri&ccedil;&atilde;o detalhada do erro.
       fields:
         type: string
-        description: Parâmetros referentes ao erro
-
+        description: Par&acirc;metros referentes ao erro.
