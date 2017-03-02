@@ -19,7 +19,7 @@ class Cliente {
 
   function validar(){
     $retorno->access_token = "ok";
-    //if not: $retorno=Erro("Erro no login: email ou senha errados.",401,"Unauthorized");
+    //if not: $retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
     return $retorno;
   }
 }
