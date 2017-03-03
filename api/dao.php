@@ -5,14 +5,21 @@
 include "sql.php";
 
 class DAO {
-  private $db;
+  private $dados;
 
   function __construct() {
-    $this->db = new sql();
-    $this->db->conectar;
+    $this->dados = new sql();
+    $this->dados->conectar;
   }
 
   function loginCliente($cliente) {
+/* workflow:
+$dadosCliente=$this->dados->pegaCliente($cliente->id);
+if(!$dadosCliente->existe){$this->dados->salvaCliente($cliente);}
+if($cliente->senha==$dadosCliente->senha){$this->dados->geraToken($cliente->id);}
+
+
+*/
     if($cliente->senha=="123"){
       $retorno->access_token="ok:" . $cliente->email;
     }else{

@@ -29,6 +29,25 @@ class sql {
     $this->password=$pass;
   }
 
+  function pegaCliente($id){
+    
+  /* adicionar no objeto retornado:
+     $obj->existe=true;  //cliente existe
+     $obj->existe=false; //cliente nao existe
+  */
+  }
+  function salvaCliente($cliente){
+
+  }
+
+  function geraToken($id){
+
+  }
+
+  function validaToken($token){
+
+
+  }
   
 
 }
