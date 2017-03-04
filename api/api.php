@@ -29,6 +29,20 @@ if($_GET['tipo']=="login"){
 }
 
 
+/* Config */
+
+if($_GET['tipo']=="config" && $_GET['id']=="perfil"){
+  $cliente = new Cliente();
+  $input=converterInput();
+  $cliente->nome=$input->nome;
+  $cliente->senha=$input->senha;
+  $cliente->email=$input->email;
+  $cliente->id=$cliente->validarToken();
+  $cliente->id="5";
+  $retorno = $cliente->salvar();
+}
+
+
 /* Responder ao cliente */
 responder($retorno);
 exit; // fim

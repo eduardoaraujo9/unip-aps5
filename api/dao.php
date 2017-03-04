@@ -12,28 +12,12 @@ class DAO {
     $this->dados->conectar;
   }
 
-  function loginCliente($cliente) {
-/* workflow:
-$dadosCliente=$this->dados->pegaCliente($cliente->id);
-if(!$dadosCliente->existe){$this->dados->salvaCliente($cliente);}
-if($cliente->senha==$dadosCliente->senha){$this->dados->geraToken($cliente->id);}
-
-
-*/
-    if($cliente->senha=="123"){
-      $retorno->access_token="ok:" . $cliente->email;
-    }else{
-      $retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
-    }
-    return $retorno;
-  }
-
-  function salvarCliente($obj) {
-
+  function salvarCliente($cliente) {
+    return $this->dados->salvaCliente($cliente);
   }
   
-  function lerCliente($obj) {
-
+  function lerCliente($cliente) {
+    return $this->dados->pegaCliente($cliente->email);
   }
 
   function salvarChat($obj) {
@@ -52,6 +36,9 @@ if($cliente->senha==$dadosCliente->senha){$this->dados->geraToken($cliente->id);
 
   }
 
+  function geraToken($id){
+    echo "gerar token:".$id;exit;
+  }
   function validarToken($obj) {
 
   }

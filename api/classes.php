@@ -24,7 +24,23 @@ class Cliente {
   
   function validar(){
     if(strlen($this->email)>0){
-      $retorno = $this->DAO->loginCliente($this);
+      $cliente = $this->DAO->lerCliente($this);
+      if($cliente->erro){
+        $retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
+      }else if($cliente->existe){
+        if($cliente->senha==$this->senha){
+          $retorno->access_token=$this->DAO->geraToken($cliente->id);
+        }else{
+          $retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
+        }
+      }else{
+        $cliente=$this->salvar();
+        if($cliente->erro){
+          $retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
+        }else{
+          $retorno->access_token=$this->DAO->geraToken($cliente->id);
+        }
+      }
     }else{
       $retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
     }
@@ -32,11 +48,19 @@ class Cliente {
   }
 
   function salvar(){
-    $this->DAO->salvarCliente($this);
+    //if sem ID salva
+    //else valida token
+    return $this->DAO->salvarCliente($this);
   }
 
   function atualizou(){
     $this->DAO->atualizarCliente($this);
+  }
+  function validarToken(){
+
+  }
+  function atualizarToken(){
+
   }
 
 }
