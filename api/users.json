@@ -1,6 +1,0 @@
-[
-{"user":1,"login":"testolino","pass":"testando123","token":"dGVzdG9saW5v"},
-{"user":2,"login":"joselito","pass":"testar","token":"am9zZWxpdG8="},
-{"app":1,"client_id":"Y2xpZW50ZWlkbnVtZXJvMQ","client_secret":"c2VjcmV0QUJDREUxMg"},
-{"app":2,"client_id":"Y2xpZW50ZWlkbnVtZXJvMg","client_secret":"c2VjcmV0REVGISNA"}
-]
