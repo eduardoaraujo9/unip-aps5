@@ -29,7 +29,7 @@ class sql {
     $this->password=$pass;
   }
 
-  function pegaCliente($email){
+  function lerClienteEmail($email){
     $this->conectar();
     if($this->conn->connect_errno){
       $obj->erro=true;
@@ -53,6 +53,32 @@ class sql {
     }
     return $obj;
   }
+
+  function lerClienteId($id){
+    $this->conectar();
+    if($this->conn->connect_errno){
+      $obj->erro=true;
+      $obj->error->msg="Erro de conexao ao banco de dados.";
+      $obj->error->code=503;
+      $obj->error->short="Service Unavailable";
+    }else{
+      $result = $this->conn->query("SELECT * FROM clientes WHERE id = '" . $id . "';");
+      if(!$result){
+        $obj->erro=true;
+        $obj->error->msg="Erro interno no banco de dados.";
+        $obj->error->code=500;
+        $obj->error->short="Internal Server Error";
+      }else{
+        if($result->num_rows=="0"){$obj->existe=false;}
+        else{
+          $obj=$result->fetch_object();
+          $obj->existe=true;
+        }
+      }
+    }
+    return $obj;
+  }
+
 
   function salvaCliente($cliente){
     $this->conectar();
@@ -85,7 +111,11 @@ class sql {
         $obj->error->short="Internal Server Error";
       }
     }
-    return $this->pegaCliente($cliente->email); //retorna o cliente salvo ou atualizado (com id criado ou erro)
+    if(strlen($cliente->email)>0){
+      return $this->lerClienteEmail($cliente->email); //retorna o cliente salvo ou atualizado (com id criado ou erro)
+    }else{
+      return $this->lerClienteId($cliente->id);
+    }
   }
 
   function salvarToken($token){

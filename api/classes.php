@@ -22,9 +22,9 @@ class Cliente {
     $this->DAO = new DAO();
   }
   
-  function validar(){
+  function login(){
     if(strlen($this->email)>0){
-      $cliente = $this->DAO->lerCliente($this);
+      $cliente = $this->DAO->lerClienteEmail($this->email);
       if($cliente->erro){
         $retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
       }else if($cliente->existe){
@@ -49,6 +49,12 @@ class Cliente {
       $retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
     }
     return $retorno;
+  }
+  
+  function ler(){
+    if(strlen($this->email)>0){return $this->DAO->lerClienteEmail($this->email);}
+    elseif(strlen($this->id)>0){return $this->DAO->lerClienteId($this->id);}
+    else{return Erro("Erro interno",500,"Internal Server Error");}
   }
 
   function salvar(){
@@ -100,66 +106,47 @@ class Token {
   }
 
   function validar(){
-    if(strlen($this->id)>0){
-      $obj=$this->DAO->lerTokenId($this->id);
-    }elseif(strlen($this->token)>0){
-      $obj=$this->DAO->lerTokenHash($this->token);
-    }else{
+    if(strlen($this->id)==0&&strlen($this->token)==0){
       return Erro("Token invalido.",403,"Forbidden");
+    }
+    if(strlen($this->id)==0&&strlen($this->token)>0){
+      $obj=$this->DAO->lerTokenHash($this->token);
+      $this->id=$obj->id;
+    }else{
+      $obj=$this->DAO->lerTokenId($this->id);
     }
     $this->valido=false;
     if($obj->token==$this->token){
       $date=new DateTime($obj->validade);
-      $time=explode(":",$date->diff(new DateTime())->format('%i:%s'));
-      $time[0]*=60;
-      $time[0]+=$time[1];
-      if($time[0]>0){
+      if($date->diff(new DateTime())->format('%R')=="-"){
         $this->valido=true;
       }
     }
-    $this->id=$obj->id;
+    if(!$this->valido){
+      $return = Erro("Token invalido.",403,"Forbidden");
+      $return->valido=false;
+      return $return;
+    }
     $this->validade=$obj->validade;
     return $this;
   }
 
   function atualizar(){
-   // se ID empty: pegar ID
-   // se token empty: pegar token
-   // se ambos empty: nao atualiza
     $this->validade=new DateTime();
-    $this->validade->add(new DateInterval('PT30M'));
+    $this->validade=$this->validade->add(new DateInterval('PT30M'));
     $this->validade=$this->validade->format('Y-m-d H:i:s');
-
-    if(strlen($this->id)>0){
- return Erro("Nao foi possivel validar o id token.",501,"Not Implemented");
-      $access = $this->DAO->salvarToken($this);
-
-    }else if(strlen($this->token)>0){
- return Erro("Nao foi possivel validar o token.",501,"Not Implemented");
-      $access = $this->DAO->salvarToken($this);
-
-    }else{
-      $access = Erro("Token invalido.",403,"Forbidden");
+    if(strlen($this->id)==0&&strlen($this->token)==0){
+      return Erro("Token invalido.",403,"Forbidden");
     }
-
+    if(strlen($this->id)>0&&strlen($this->token)==0){
+      $obj=$this->DAO->lerTokenId($this->id);
+      $this->token=$obj->token;
+    }else{
+      $obj=$this->DAO->lerTokenHash($this->token);
+      $this->id=$obj->id;
+    }
     $access = $this->DAO->salvarToken($this);
-    return $access;
-  }
-
-  function validarToken($token){
-
-/*
-    $date=new DateTime();
-    $date->add(new DateInterval('PT30M'));
-    $time=explode(":",$date->diff(new DateTime())->format('%i:%s'));
-    $time[0]*=60;
-    $time[0]+=$time[1];
-    //$date->format('Y-m-d H:i:s')
-*/
-    $obj->id='5';
-    return $this->DAO->lerToken($obj);
-//$retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
-
+    return $access->token;
   }
 
 

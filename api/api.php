@@ -25,7 +25,7 @@ if($_GET['tipo']=="login"){
   $input=converterInput();
   $cliente->email=$input->email;
   $cliente->senha=$input->senha;
-  $retorno = $cliente->validar();
+  $retorno = $cliente->login();
 }
 
 
@@ -34,20 +34,26 @@ if($_GET['tipo']=="login"){
 if($_GET['tipo']=="config" && $_GET['id']=="perfil"){
   $cliente = new Cliente();
   $input=converterInput();
-  $cliente->nome=$input->nome;
-  $cliente->senha=$input->senha;
-  $cliente->email=$input->email;
   $token=new Token();
   $token=$token->validar();
-  var_dump($token);exit;
-  if($token->valid&&$token->id==$cliente->id){
-    $cliente->id="5";
-    $retorno = $cliente->salvar();
+  if($token->valido){
+    $cliente->id=$token->id;
+    if(count($input)>0){//foi POST
+      $cliente->nome=$input->nome;
+      $cliente->senha=$input->senha;
+      $cliente->email=$input->email;
+      $retorno = $cliente->salvar();
+    }else{//foi GET
+      $retorno = $cliente->ler();
+    }
   }else{
     $retorno = Erro("Token invalido.",403,"Forbidden");
   }
 }
 
+/* Limpar possiveis respostas de uso interno */
+unset($retorno->existe);
+unset($retorno->senha);
 
 /* Responder ao cliente */
 responder($retorno);
