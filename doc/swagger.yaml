@@ -48,8 +48,54 @@ paths:
           description: Acesso Negado
           schema:
             $ref: '#/definitions/Error'
+  /config/perfil:
+    post:
+      tags:
+        - Config
+      summary: Configura o perfil de um usu&aacute;rio no sistema.
+      description: Define o nome, email e/ou a senha de um usu&aacute;rio do sistema, recebe de retorno o perfil do usu&aacute;rio.
+      parameters:
+        - name: nome
+          in: formData
+          description: nome do usu&aacute;rio
+          type: string
+        - name: email
+          in: formData
+          description: email do usu&aacute;rio
+          type: string
+        - name: senha
+          in: formData
+          description: senha do usu&aacute;rio
+          type: string
+      responses:
+        '200':
+          description: Perfil do Usuario
+          schema:
+            $ref: '#/definitions/Usuario'
+        default:
+          description: Acesso Negado
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - api_key: []
+    get:
+      tags:
+        - Config
+      summary: Obt&eacute;m o perfil de um usu&aacute;rio no sistema.
+      description: Recebe o id, o nome, o email e a &uacute;ltima atualiza&ccedil;&atilde;o de um usu&aacute;rio do sistema, recebe de retorno o perfil do usu&aacute;rio.
+      responses:
+        '200':
+          description: Perfil do Usuario
+          schema:
+            $ref: '#/definitions/Usuario'
+        default:
+          description: Acesso Negado
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - api_key: []
 securityDefinitions:
-  access_token:
+  api_key:
     type: apiKey
     description: Chave identificadora do cliente, obtida atrav&eacute;s da `API de Login`
     name: access_token
@@ -61,6 +107,25 @@ definitions:
       access_token:
         type: string
         description: Token de acesso &agrave; API.
+  Usuario:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+        description: Id do usu&aacute;rio.
+      nome:
+        type: string
+        description: Nome do usu&aacute;rio.
+      email:
+        type: string
+        description: Email do usu&aacute;rio.
+      senha:
+        type: string
+        description: Senha do usu&aacute;rio.
+      lastupdate:
+        type: string
+        description: Data da &uacute;ltima atualiza&ccedil;&atilde;o feita pelo usu&aacute;rio.
   Error:
     type: object
     properties:
