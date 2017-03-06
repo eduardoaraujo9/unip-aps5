@@ -29,7 +29,9 @@ class Cliente {
         $retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
       }else if($cliente->existe){
         if($cliente->senha==$this->senha){
-          $retorno->access_token=$this->DAO->geraToken($cliente->id);
+          $token=new Token();
+          $token->id=$cliente->id;
+          $retorno->access_token=$token->gerar();
         }else{
           $retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
         }
@@ -38,7 +40,9 @@ class Cliente {
         if($cliente->erro){
           $retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
         }else{
-          $retorno->access_token=$this->DAO->geraToken($cliente->id);
+          $token=new Token();
+          $token->id=$cliente->id;
+          $retorno->access_token=$token->gerar();
         }
       }
     }else{
@@ -51,17 +55,21 @@ class Cliente {
     //if sem ID salva
     //else valida token
     return $this->DAO->salvarCliente($this);
+/*
+        if($cliente->erro){
+          $retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
+        }else{
+          $retorno->access_token=$this->gerarToken($cliente->id);
+        }
+*/
   }
 
   function atualizou(){
     $this->DAO->atualizarCliente($this);
+//esse eh o last update
   }
-  function validarToken(){
 
-  }
-  function atualizarToken(){
 
-  }
 
 }
 
@@ -74,6 +82,55 @@ class Token {
   public $id;
   public $token;
   public $validade;
+
+  private $DAO;
+  function __construct() {
+    $this->DAO = new DAO();
+  }
+
+  function gerar(){
+    $this->token=dechex($this->id) . dechex(rand(536870911,4294967295));
+    $this->validade=new DateTime();
+    $this->validade->add(new DateInterval('PT30M'));
+    $this->validade=$this->validade->format('Y-m-d H:i:s');
+    $access = $this->DAO->salvarToken($this);
+    return $access->token;
+  }
+
+  function validar(){
+    if(strlen($this->id)>0){ return Erro("Nao foi possivel validar o id token.",501,"Not Implemented");}//busca por id
+    else if(strlen($this->token)>0){ return Erro("Nao foi possivel validar o token.",501,"Not Implemented");}//busca por token
+    else{
+      return Erro("Token invalido.",403,"Forbidden");
+    }
+  }
+
+  function atualizar(){
+    $this->id=$id;
+    $this->token=dechex($id) . dechex(rand(536870911,4294967295));
+    $this->validade=new DateTime();
+    $this->validade->add(new DateInterval('PT30M'));
+    $this->validade=$this->validade->format('Y-m-d H:i:s');
+    $access = $this->DAO->salvarToken($this);
+  }
+
+  function validarToken($token){
+
+/*
+    $date=new DateTime();
+    $date->add(new DateInterval('PT30M'));
+    $time=explode(":",$date->diff(new DateTime())->format('%i:%s'));
+    $time[0]*=60;
+    $time[0]+=$time[1];
+    //$date->format('Y-m-d H:i:s')
+*/
+    $obj->id='5';
+    return $this->DAO->lerToken($obj);
+//$retorno=Erro("Erro no login: email ou senha errados.",403,"Forbidden");
+
+  }
+
+
 }
 
 ?>

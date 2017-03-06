@@ -63,8 +63,18 @@ class sql {
       $obj->error->short="Service Unavailable";
     }else{
       if(strlen($cliente->id)>0){
-// compoe query soh com os elementos existentes (push_array+implode",")
-        $result = $this->conn->query("UPDATE clientes SET `nome`='" . $cliente->nome . "',`email`='" . $cliente->email . "',`senha`='" . $cliente->senha . "' WHERE `id`='" . $cliente->id . "';");
+        $query=array();
+        if(strlen($cliente->nome)>0){array_push($query,"`nome`='" . $cliente->nome . "'");}
+        if(strlen($cliente->email)>0){array_push($query,"`email`='" . $cliente->email . "'");}
+        if(strlen($cliente->senha)>0){array_push($query,"`senha`='" . $cliente->senha . "'");}
+        if(count($query)>0){
+          $result = $this->conn->query("UPDATE clientes SET " . implode($query,","). " WHERE `id`='" . $cliente->id . "';");
+        }else{
+          $obj->erro=true;
+          $obj->error->msg="Requisicao errada, faltam os parametros.";
+          $obj->error->code=300;
+          $obj->error->short="Bad Request";
+        }
       }else{
         $result = $this->conn->query("INSERT INTO clientes (`nome`,`email`,`senha`) VALUES ('" . $cliente->nome . "','" . $cliente->email . "','" . $cliente->senha . "');");
       }
@@ -75,19 +85,102 @@ class sql {
         $obj->error->short="Internal Server Error";
       }
     }
-    return $this->pegaCliente($cliente->email); //retorna o cliente salvo ou atualizado (com id ou erro)
-
+    return $this->pegaCliente($cliente->email); //retorna o cliente salvo ou atualizado (com id criado ou erro)
   }
 
-  function geraToken($id){
-
+  function salvarToken($token){
+    $this->conectar();
+    if($this->conn->connect_errno){
+      $obj->erro=true;
+      $obj->error->msg="Erro de conexao ao banco de dados.";
+      $obj->error->code=503;
+      $obj->error->short="Service Unavailable";
+    }else{
+      $result = $this->conn->query("SELECT * FROM tokens WHERE id = '" . $token->id . "';");
+      if(!$result){
+        $obj->erro=true;
+        $obj->error->msg="Erro interno no banco de dados.";
+        $obj->error->code=500;
+        $obj->error->short="Internal Server Error";
+      }else{
+        if($result->num_rows=="0"){
+          $result = $this->conn->query("INSERT INTO tokens (`id`,`token`,`validade`) VALUES ('" . $token->id . "','" . $token->token . "','" . $token->validade . "');");
+        }else{
+          $obj=$result->fetch_object();
+          $query=array();
+          if($token->token!=$obj->token){array_push($query,"`token`='" . $token->token . "'");}
+          array_push($query,"`validade`='" . $token->validade . "'");
+          $result = $this->conn->query("UPDATE tokens SET " . implode($query,","). " WHERE `id`='" . $token->id . "';");
+        }
+        if(!$result){
+          $obj->erro=true;
+          $obj->error->msg="Erro interno no banco de dados.";
+          $obj->error->code=500;
+          $obj->error->short="Internal Server Error";
+        }else{
+          return $token;
+        }
+      }
+    }
+    return $obj;
   }
 
-  function validaToken($token){
-
-
+  function lerTokenId($id){
+    $this->conectar();
+    if($this->conn->connect_errno){
+      $obj->erro=true;
+      $obj->error->msg="Erro de conexao ao banco de dados.";
+      $obj->error->code=503;
+      $obj->error->short="Service Unavailable";
+    }else{
+      $result = $this->conn->query("SELECT * FROM tokens WHERE `id`='" . $id . "';");
+      if(!$result){
+        $obj->erro=true;
+        $obj->error->msg="Erro interno no banco de dados.";
+        $obj->error->code=500;
+        $obj->error->short="Internal Server Error";
+      }else{
+        if($result->num_rows=="0"){
+          $obj->id=0;
+          $obj->token="0000";
+          $obj->validade=new DateTime();
+          $obj->validade->sub('PT1S');
+        }else{
+          $obj=$result->fetch_object();
+        }
+      }
+    }
+    return $obj;
   }
-  
+
+  function lerTokenHash($token){
+    $this->conectar();
+    if($this->conn->connect_errno){
+      $obj->erro=true;
+      $obj->error->msg="Erro de conexao ao banco de dados.";
+      $obj->error->code=503;
+      $obj->error->short="Service Unavailable";
+    }else{
+      $result = $this->conn->query("SELECT * FROM tokens WHERE `token`='" . $token . "';");
+      if(!$result){
+        $obj->erro=true;
+        $obj->error->msg="Erro interno no banco de dados.";
+        $obj->error->code=500;
+        $obj->error->short="Internal Server Error";
+      }else{
+        if($result->num_rows=="0"){
+          $obj->id=0;
+          $obj->token="0000";
+          $obj->validade=new DateTime();
+          $obj->validade->sub('PT1S');
+        }else{
+          $obj=$result->fetch_object();
+        }
+      }
+    }
+    return $obj;
+  }
+
 
 }
 

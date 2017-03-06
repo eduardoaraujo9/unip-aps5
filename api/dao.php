@@ -36,11 +36,13 @@ class DAO {
 
   }
 
-  function geraToken($id){
-    echo "gerar token:".$id;exit;
+  function salvarToken($token){
+    return $this->dados->salvarToken($token);
   }
-  function validarToken($obj) {
 
+  function lerToken($obj) {
+     if(strlen($obj->id)>0){return $this->dados->lerTokenId($id);}
+     if(strlen($obj->token)>0){return $this->dados->lerTokenHash($token);}
   }
 
 }
