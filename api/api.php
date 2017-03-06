@@ -37,9 +37,15 @@ if($_GET['tipo']=="config" && $_GET['id']=="perfil"){
   $cliente->nome=$input->nome;
   $cliente->senha=$input->senha;
   $cliente->email=$input->email;
-  $cliente->id=$cliente->validarToken();
-  $cliente->id="5";
-  $retorno = $cliente->salvar();
+  $token=new Token();
+  $token=$token->validar();
+  var_dump($token);exit;
+  if($token->valid&&$token->id==$cliente->id){
+    $cliente->id="5";
+    $retorno = $cliente->salvar();
+  }else{
+    $retorno = Erro("Token invalido.",403,"Forbidden");
+  }
 }
 
 

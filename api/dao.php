@@ -40,9 +40,12 @@ class DAO {
     return $this->dados->salvarToken($token);
   }
 
-  function lerToken($obj) {
-     if(strlen($obj->id)>0){return $this->dados->lerTokenId($id);}
-     if(strlen($obj->token)>0){return $this->dados->lerTokenHash($token);}
+  function lerTokenId($id) {
+    return $this->dados->lerTokenId($id);
+  }
+
+  function lerTokenHash($token){
+    return $this->dados->lerTokenHash($token);
   }
 
 }

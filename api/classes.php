@@ -86,6 +86,8 @@ class Token {
   private $DAO;
   function __construct() {
     $this->DAO = new DAO();
+    $header = getallheaders();
+    if(isset($header['access_token'])){$this->token=$header['access_token'];}
   }
 
   function gerar(){
@@ -98,20 +100,50 @@ class Token {
   }
 
   function validar(){
-    if(strlen($this->id)>0){ return Erro("Nao foi possivel validar o id token.",501,"Not Implemented");}//busca por id
-    else if(strlen($this->token)>0){ return Erro("Nao foi possivel validar o token.",501,"Not Implemented");}//busca por token
-    else{
+    if(strlen($this->id)>0){
+      $obj=$this->DAO->lerTokenId($this->id);
+    }elseif(strlen($this->token)>0){
+      $obj=$this->DAO->lerTokenHash($this->token);
+    }else{
       return Erro("Token invalido.",403,"Forbidden");
     }
+    $this->valido=false;
+    if($obj->token==$this->token){
+      $date=new DateTime($obj->validade);
+      $time=explode(":",$date->diff(new DateTime())->format('%i:%s'));
+      $time[0]*=60;
+      $time[0]+=$time[1];
+      if($time[0]>0){
+        $this->valido=true;
+      }
+    }
+    $this->id=$obj->id;
+    $this->validade=$obj->validade;
+    return $this;
   }
 
   function atualizar(){
-    $this->id=$id;
-    $this->token=dechex($id) . dechex(rand(536870911,4294967295));
+   // se ID empty: pegar ID
+   // se token empty: pegar token
+   // se ambos empty: nao atualiza
     $this->validade=new DateTime();
     $this->validade->add(new DateInterval('PT30M'));
     $this->validade=$this->validade->format('Y-m-d H:i:s');
+
+    if(strlen($this->id)>0){
+ return Erro("Nao foi possivel validar o id token.",501,"Not Implemented");
+      $access = $this->DAO->salvarToken($this);
+
+    }else if(strlen($this->token)>0){
+ return Erro("Nao foi possivel validar o token.",501,"Not Implemented");
+      $access = $this->DAO->salvarToken($this);
+
+    }else{
+      $access = Erro("Token invalido.",403,"Forbidden");
+    }
+
     $access = $this->DAO->salvarToken($this);
+    return $access;
   }
 
   function validarToken($token){
