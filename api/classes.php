@@ -22,7 +22,7 @@ class Chat {
   }
 
   function ler(){
-    return $this->id;
+    return $this->DAO->lerChat($this->id);
   }
 }
 

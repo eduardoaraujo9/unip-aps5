@@ -19,6 +19,7 @@ class DAO {
   function lerClienteEmail($email){
     return $this->dados->lerClienteEmail($email);
   }
+
   function lerClienteId($id){
     return $this->dados->lerClienteId($id);
   }
@@ -28,7 +29,7 @@ class DAO {
   }
 
   function lerChat($obj) {
-
+    return $this->dados->lerChat($obj);
   }
 
   function salvarConfig($obj) {

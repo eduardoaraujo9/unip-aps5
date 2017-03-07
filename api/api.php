@@ -72,12 +72,14 @@ if($_GET['tipo']=="msg"){
     }else{//foi GET
       if(strlen($input->lastupdate)>0){
         $chat->id=$input->lastupdate;
+      }else{
+        $obj=$cliente->ler();
+        $chat->id=$obj->lastupdate;
       }
       $retorno = $chat->ler();
-             /* ultimo obj do $retorno :
-                $cliente->lastupdate = ultimoObjRetorno;
-                $cliente->atualizar();
-             */
+      $lastupdate=$retorno[count($retorno)-1]->lastupdate;
+      $cliente->lastupdate=$lastupdate;
+      $cliente->atualizar();
     }
     $token->atualizar();
   }else{

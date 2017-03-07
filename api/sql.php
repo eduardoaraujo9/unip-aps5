@@ -267,6 +267,32 @@ class sql {
     return $result->fetch_object(); //retorna o chat com id (ou erro)
   }
 
+  function lerChat($lastupdate){
+    $this->conectar();
+    if($this->conn->connect_errno){
+      $obj->erro=true;
+      $obj->error->msg="Erro de conexao ao banco de dados.";
+      $obj->error->code=503;
+      $obj->error->short="Service Unavailable";
+    }else{
+      if(strlen($lastupdate)>0){
+        $where = " WHERE m.id > '" . $lastupdate . "'";
+      }
+      $result = $this->conn->query("SELECT m.id as lastupdate,m.hora,c.nome,m.tipo,m.dados FROM chat AS m LEFT JOIN clientes AS c ON m.cliente=c.id" . $where . ";");
+      if(!$result&&!$obj->erro){
+        $obj->erro=true;
+        $obj->error->msg="Erro interno no banco de dados.";
+        $obj->error->code=500;
+        $obj->error->short="Internal Server Error";
+      }
+    }
+    if($obj->erro){return $obj;}
+    $resposta = array();
+    while($retorno=$result->fetch_object()){array_push($resposta,$retorno);}
+    if(count($resposta)==0){$resposta['lastupdate']=$lastupdate;}
+    return $resposta;
+  }
+
 
 
 
