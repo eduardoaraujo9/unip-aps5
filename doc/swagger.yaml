@@ -3,7 +3,7 @@ info:
   title: API de Chat
   description: >-
     ## API desenvolvida como APS de Redes da UNIP no 5.o Semestre de Ci&ecirc;ncias da Computa&ccedil;&atilde;o (Jan/2017).
-  version: '0.1beta'
+  version: '0.2'
   contact:
     name: Eduardo Araujo
     email: spamproedu@outlook.com
@@ -95,6 +95,53 @@ paths:
             $ref: '#/definitions/Error'
       security:
         - api_key: []
+  /msg:
+    post:
+      tags:
+        - Mensagem
+      summary: Mensagens enviadas no sistema.
+      description: Envia ou recebe as mensagens do sistema.
+      parameters:
+        - name: dados
+          in: formData
+          description: Mensagem a ser enviada no sistema.
+          type: string
+        - name: tipo
+          in: formData
+          description: Tipo de mensagem enviada no sistema.
+          type: integer
+          format: int32
+        - name: lastupdate
+          in: formData
+          description: Solicita mensagens posteriores a essa &uacute;ltima atualiza&ccedil;&atilde;o.
+          type: string
+      responses:
+        '200':
+          description: Mensagem de Chat
+          schema:
+            $ref: '#/definitions/Chat'
+        default:
+          description: Acesso Negado
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - api_key: []
+    get:
+      tags:
+        - Mensagem
+      summary: Mensagens enviadas no sistema.
+      description: Recebe as mensagens do sistema, a partir da &uacute;ltima mensagem enviada que foi registrada no sistema.
+      responses:
+        '200':
+          description: Mensagem de Chat
+          schema:
+            $ref: '#/definitions/Chat'
+        default:
+          description: Acesso Negado
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+        - api_key: []
 securityDefinitions:
   api_key:
     type: apiKey
@@ -127,6 +174,26 @@ definitions:
       lastupdate:
         type: string
         description: Data da &uacute;ltima atualiza&ccedil;&atilde;o feita pelo usu&aacute;rio.
+  Chat:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+        description: Id do chat.
+      nome:
+        type: string
+        description: Nome do usu&aacute;rio do chat.
+      hora:
+        type: string
+        description: Hor&aacute;rio da mensagem do chat.
+      tipo:
+        type: integer
+        format: int32
+        description: Tipo da mensagem.
+      dados:
+        type: string
+        description: Mensagem do chat.
   Error:
     type: object
     properties:
