@@ -91,6 +91,7 @@ if($_GET['tipo']=="msg"){
 /* Limpar possiveis respostas de uso interno */
 unset($retorno->existe);
 unset($retorno->senha);
+//unset($retorno->erro); //revisar
 
 /* Responder ao cliente */
 responder($retorno);
