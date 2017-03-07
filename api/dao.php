@@ -23,8 +23,8 @@ class DAO {
     return $this->dados->lerClienteId($id);
   }
 
-  function salvarChat($obj) {
-
+  function salvarChat($chat){
+    return $this->dados->salvarChat($chat);
   }
 
   function lerChat($obj) {

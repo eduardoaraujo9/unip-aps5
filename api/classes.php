@@ -8,6 +8,22 @@ class Chat {
   public $hora;
   public $tipo;
   public $dados;
+
+  private $DAO;
+  function __construct(){
+    $this->DAO = new DAO();
+  }
+  
+  function post(){
+    $this->hora=new DateTime();
+    $this->hora=$this->hora->format('Y-m-d H:i:s');
+    if(strlen($this->tipo)==0){$this->tipo=0;}
+    return $this->DAO->salvarChat($this);
+  }
+
+  function ler(){
+    return $this->id;
+  }
 }
 
 class Cliente {
@@ -58,24 +74,14 @@ class Cliente {
   }
 
   function salvar(){
-    //if sem ID salva
-    //else valida token
     return $this->DAO->salvarCliente($this);
-/*
-        if($cliente->erro){
-          $retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
-        }else{
-          $retorno->access_token=$this->gerarToken($cliente->id);
-        }
-*/
   }
 
-  function atualizou(){
-    $this->DAO->atualizarCliente($this);
-//esse eh o last update
+  function atualizar(){
+    $obj=$this->DAO->lerClienteId($this->id);
+    $obj->lastupdate=$this->lastupdate;
+    return $this->DAO->salvarCliente($obj);
   }
-
-
 
 }
 

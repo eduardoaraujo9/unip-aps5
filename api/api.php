@@ -32,12 +32,12 @@ if($_GET['tipo']=="login"){
 /* Config */
 
 if($_GET['tipo']=="config" && $_GET['id']=="perfil"){
-  $cliente = new Cliente();
-  $input=converterInput();
   $token=new Token();
   $token=$token->validar();
   if($token->valido){
+    $cliente = new Cliente();
     $cliente->id=$token->id;
+    $input=converterInput();
     if(count($input)>0){//foi POST
       $cliente->nome=$input->nome;
       $cliente->senha=$input->senha;
@@ -46,10 +46,45 @@ if($_GET['tipo']=="config" && $_GET['id']=="perfil"){
     }else{//foi GET
       $retorno = $cliente->ler();
     }
+    $token->atualizar();
   }else{
     $retorno = Erro("Token invalido.",403,"Forbidden");
   }
 }
+
+
+/* Mensagens */
+if($_GET['tipo']=="msg"){
+  $token=new Token();
+  $token=$token->validar();
+  if($token->valido){
+    $cliente = new Cliente();
+    $cliente->id=$token->id;
+    $input=converterInput();
+    $chat = new Chat();
+    if(count($input)>0&&strlen($input->lastupdate)==0){//foi POST
+      $chat->cliente=$cliente->id;
+      $chat->tipo=$input->tipo;
+      $chat->dados=$input->dados; 
+      $retorno = $chat->post();
+      $cliente->lastupdate=$retorno->lastupdate;
+      $cliente->atualizar();
+    }else{//foi GET
+      if(strlen($input->lastupdate)>0){
+        $chat->id=$input->lastupdate;
+      }
+      $retorno = $chat->ler();
+             /* ultimo obj do $retorno :
+                $cliente->lastupdate = ultimoObjRetorno;
+                $cliente->atualizar();
+             */
+    }
+    $token->atualizar();
+  }else{
+    $retorno = Erro("Token invalido.",403,"Forbidden");
+  }
+}
+
 
 /* Limpar possiveis respostas de uso interno */
 unset($retorno->existe);
