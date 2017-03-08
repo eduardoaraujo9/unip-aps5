@@ -45,7 +45,6 @@ if($_GET['tipo']=="config" && $_GET['id']=="perfil"){
     }else{//foi GET
       $retorno = $cliente->ler();
     }
-    $token->atualizar();
   }else{
     $retorno = Erro("Token invalido.",403,"Forbidden");
   }
@@ -80,7 +79,6 @@ if($_GET['tipo']=="msg"){
       $cliente->lastupdate=$lastupdate;
       $cliente->atualizar();
     }
-    $token->atualizar();
   }else{
     $retorno = Erro("Token invalido.",403,"Forbidden");
   }

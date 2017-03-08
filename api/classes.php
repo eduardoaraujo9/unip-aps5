@@ -42,7 +42,6 @@ class Cliente {
     if(strlen($this->email)>0){
       $cliente = $this->DAO->lerClienteEmail($this->email);
       if($cliente->erro){
-        //$retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
         $retorno=$cliente->error;
       }else if($cliente->existe){
         if($cliente->senha==$this->senha){
@@ -55,7 +54,6 @@ class Cliente {
       }else{
         $cliente=$this->salvar();
         if($cliente->erro){
-          //$retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
           $retorno=$cliente->error;
         }else{
           $token=new Token();
@@ -114,8 +112,8 @@ class Token {
         $date=new DateTime($obj->validade);
         if($date->diff(new DateTime())->format('%R')=="-"){
           $this->valido=true;
+          $this->DAO->salvarToken($this);//ja atualiza a validade do token
         }
-        $this->validade=new DateTime($obj->validade);
       }
     }
   }
@@ -124,24 +122,6 @@ class Token {
     $this->token=dechex($this->id) . dechex(rand(536870911,4294967295));
     $access = $this->DAO->salvarToken($this);
     $this->valido=true;
-    return $access->token;
-  }
-
-  function atualizar(){
-    $this->validade=new DateTime();
-    $this->validade=$this->validade->add(new DateInterval('PT30M'));
-    $this->validade=$this->validade->format('Y-m-d H:i:s');
-    if(strlen($this->id)==0&&strlen($this->token)==0){
-      return Erro("Token invalido.",403,"Forbidden");
-    }
-    if(strlen($this->id)>0&&strlen($this->token)==0){
-      $obj=$this->DAO->lerTokenId($this->id);
-      $this->token=$obj->token;
-    }else{
-      $obj=$this->DAO->lerTokenHash($this->token);
-      $this->id=$obj->id;
-    }
-    $access = $this->DAO->salvarToken($this);
     return $access->token;
   }
 
