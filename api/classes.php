@@ -108,7 +108,6 @@ class Token {
     $header = getallheaders();
     if(isset($header['access_token'])){
       $this->token=$header['access_token'];
-
       $obj=$this->DAO->lerTokenHash($this->token);
       if(!$obj->erro){
         $this->id=$obj->id;
@@ -116,7 +115,7 @@ class Token {
         if($date->diff(new DateTime())->format('%R')=="-"){
           $this->valido=true;
         }
-      $this->validade=$obj->validade;
+        $this->validade=new DateTime($obj->validade);
       }
     }
   }

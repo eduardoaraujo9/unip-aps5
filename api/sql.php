@@ -152,10 +152,8 @@ class sql {
         $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
       }else{
         if($result->num_rows=="0"){
-          $obj->id=0;
-          $obj->token="0000";
-          $obj->validade=new DateTime();
-          $obj->validade->sub('PT1S');
+          $obj->erro=true;
+          $obj->error=Erro("Objeto nao encontrado.",404,"Not Found");
         }else{
           $obj=$result->fetch_object();
         }
@@ -176,10 +174,8 @@ class sql {
         $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
       }else{
         if($result->num_rows=="0"){
-          $obj->id=0;
-          $obj->token="0000";
-          $obj->validade=new DateTime();
-          $obj->validade->sub('PT1S');
+          $obj->erro=true;
+          $obj->error=Erro("Objeto nao encontrado.",404,"Not Found");
         }else{
           $obj=$result->fetch_object();
         }
