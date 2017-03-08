@@ -12,11 +12,11 @@ class Chat {
   private $DAO;
   function __construct(){
     $this->DAO = new DAO();
+    $this->hora=new DateTime();
+    $this->hora=$this->hora->format('Y-m-d H:i:s');
   }
   
   function post(){
-    $this->hora=new DateTime();
-    $this->hora=$this->hora->format('Y-m-d H:i:s');
     if(strlen($this->tipo)==0){$this->tipo=0;}
     return $this->DAO->salvarChat($this);
   }
@@ -96,47 +96,36 @@ class Token {
   public $id;
   public $token;
   public $validade;
+  public $valido;
 
   private $DAO;
   function __construct() {
     $this->DAO = new DAO();
+    $this->validade=new DateTime();
+    $this->validade=$this->validade->add(new DateInterval('PT30M'));
+    $this->validade=$this->validade->format('Y-m-d H:i:s');
+    $this->valido=false;
     $header = getallheaders();
-    if(isset($header['access_token'])){$this->token=$header['access_token'];}
+    if(isset($header['access_token'])){
+      $this->token=$header['access_token'];
+
+      $obj=$this->DAO->lerTokenHash($this->token);
+      if(!$obj->erro){
+        $this->id=$obj->id;
+        $date=new DateTime($obj->validade);
+        if($date->diff(new DateTime())->format('%R')=="-"){
+          $this->valido=true;
+        }
+      $this->validade=$obj->validade;
+      }
+    }
   }
 
   function gerar(){
     $this->token=dechex($this->id) . dechex(rand(536870911,4294967295));
-    $this->validade=new DateTime();
-    $this->validade->add(new DateInterval('PT30M'));
-    $this->validade=$this->validade->format('Y-m-d H:i:s');
     $access = $this->DAO->salvarToken($this);
+    $this->valido=true;
     return $access->token;
-  }
-
-  function validar(){
-    if(strlen($this->id)==0&&strlen($this->token)==0){
-      return Erro("Token invalido.",403,"Forbidden");
-    }
-    if(strlen($this->id)==0&&strlen($this->token)>0){
-      $obj=$this->DAO->lerTokenHash($this->token);
-      $this->id=$obj->id;
-    }else{
-      $obj=$this->DAO->lerTokenId($this->id);
-    }
-    $this->valido=false;
-    if($obj->token==$this->token){
-      $date=new DateTime($obj->validade);
-      if($date->diff(new DateTime())->format('%R')=="-"){
-        $this->valido=true;
-      }
-    }
-    if(!$this->valido){
-      $return = Erro("Token invalido.",403,"Forbidden");
-      $return->valido=false;
-      return $return;
-    }
-    $this->validade=$obj->validade;
-    return $this;
   }
 
   function atualizar(){

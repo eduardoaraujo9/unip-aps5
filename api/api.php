@@ -33,7 +33,6 @@ if($_GET['tipo']=="login"){
 
 if($_GET['tipo']=="config" && $_GET['id']=="perfil"){
   $token=new Token();
-  $token=$token->validar();
   if($token->valido){
     $cliente = new Cliente();
     $cliente->id=$token->id;
@@ -57,7 +56,6 @@ if($_GET['tipo']=="config" && $_GET['id']=="perfil"){
 
 if($_GET['tipo']=="msg"){
   $token=new Token();
-  $token=$token->validar();
   if($token->valido){
     $cliente = new Cliente();
     $cliente->id=$token->id;

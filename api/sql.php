@@ -238,7 +238,7 @@ class sql {
       if(strlen($lastupdate)>0){
         $where = " WHERE m.id > '" . $lastupdate . "'";
       }
-      $result = $this->conn->query("SELECT m.id as lastupdate,m.hora,c.nome,m.tipo,m.dados FROM chat AS m LEFT JOIN clientes AS c ON m.cliente=c.id" . $where . ";");
+      $result = $this->conn->query("SELECT m.id as lastupdate,m.hora,c.nome,m.tipo,m.dados FROM chat AS m LEFT JOIN clientes AS c ON m.cliente=c.id" . $where . " LIMIT 10;");
       if(!$result&&!$obj->erro){
         $obj->erro=true;
         $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
