@@ -54,6 +54,7 @@ if($_GET['tipo']=="config" && $_GET['id']=="perfil"){
 
 
 /* Mensagens */
+
 if($_GET['tipo']=="msg"){
   $token=new Token();
   $token=$token->validar();
