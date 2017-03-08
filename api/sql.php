@@ -33,16 +33,12 @@ class sql {
     $this->conectar();
     if($this->conn->connect_errno){
       $obj->erro=true;
-      $obj->error->msg="Erro de conexao ao banco de dados.";
-      $obj->error->code=503;
-      $obj->error->short="Service Unavailable";
+      $obj->error=Erro("Erro de conexao ao banco de dados.",503,"Service Unavailable");
     }else{
       $result = $this->conn->query("SELECT * FROM clientes WHERE email = '" . $email . "';");
       if(!$result){
         $obj->erro=true;
-        $obj->error->msg="Erro interno no banco de dados.";
-        $obj->error->code=500;
-        $obj->error->short="Internal Server Error";
+        $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
       }else{
         if($result->num_rows=="0"){$obj->existe=false;}
         else{
@@ -58,16 +54,12 @@ class sql {
     $this->conectar();
     if($this->conn->connect_errno){
       $obj->erro=true;
-      $obj->error->msg="Erro de conexao ao banco de dados.";
-      $obj->error->code=503;
-      $obj->error->short="Service Unavailable";
+      $obj->error=Erro("Erro de conexao ao banco de dados.",503,"Service Unavailable");
     }else{
       $result = $this->conn->query("SELECT * FROM clientes WHERE id = '" . $id . "';");
       if(!$result){
         $obj->erro=true;
-        $obj->error->msg="Erro interno no banco de dados.";
-        $obj->error->code=500;
-        $obj->error->short="Internal Server Error";
+        $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
       }else{
         if($result->num_rows=="0"){$obj->existe=false;}
         else{
@@ -84,9 +76,7 @@ class sql {
     $this->conectar();
     if($this->conn->connect_errno){
       $obj->erro=true;
-      $obj->error->msg="Erro de conexao ao banco de dados.";
-      $obj->error->code=503;
-      $obj->error->short="Service Unavailable";
+      $obj->error=Erro("Erro de conexao ao banco de dados.",503,"Service Unavailable");
     }else{
       if(strlen($cliente->id)>0){
         $query=array();
@@ -98,23 +88,17 @@ class sql {
           $result = $this->conn->query("UPDATE clientes SET " . implode($query,","). " WHERE `id`='" . $cliente->id . "';");
         }else{
           $obj->erro=true;
-          $obj->error->msg="Requisicao errada, faltam os parametros.";
-          $obj->error->code=300;
-          $obj->error->short="Bad Request";
+          $obj->error=Erro("Requisicao errada, faltam os parametros.",300,"Bad Request", "<nome>,<email>,<senha>");
         }
       }else if(strlen($cliente->email)==0||strlen($cliente->senha)==0){
         $obj->erro=true;
-        $obj->error->msg="Requisicao errada, faltam os parametros.";
-        $obj->error->code=300;
-        $obj->error->short="Bad Request";
+        $obj->error=Erro("Requisicao errada, faltam os parametros.",300,"Bad Request", "<nome>,<email>,<senha>");
       }else{
         $result = $this->conn->query("INSERT INTO clientes (`nome`,`email`,`senha`) VALUES ('" . $cliente->nome . "','" . $cliente->email . "','" . $cliente->senha . "');");
       }
       if(!$result&&!$obj->erro){
         $obj->erro=true;
-        $obj->error->msg="Erro interno no banco de dados.";
-        $obj->error->code=500;
-        $obj->error->short="Internal Server Error";
+        $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
       }
     }
     if($obj->erro){return $obj;}
@@ -129,16 +113,12 @@ class sql {
     $this->conectar();
     if($this->conn->connect_errno){
       $obj->erro=true;
-      $obj->error->msg="Erro de conexao ao banco de dados.";
-      $obj->error->code=503;
-      $obj->error->short="Service Unavailable";
+      $obj->error=Erro("Erro de conexao ao banco de dados.",503,"Service Unavailable");
     }else{
       $result = $this->conn->query("SELECT * FROM tokens WHERE id = '" . $token->id . "';");
       if(!$result){
         $obj->erro=true;
-        $obj->error->msg="Erro interno no banco de dados.";
-        $obj->error->code=500;
-        $obj->error->short="Internal Server Error";
+        $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
       }else{
         if($result->num_rows=="0"){
           $result = $this->conn->query("INSERT INTO tokens (`id`,`token`,`validade`) VALUES ('" . $token->id . "','" . $token->token . "','" . $token->validade . "');");
@@ -151,9 +131,7 @@ class sql {
         }
         if(!$result){
           $obj->erro=true;
-          $obj->error->msg="Erro interno no banco de dados.";
-          $obj->error->code=500;
-          $obj->error->short="Internal Server Error";
+          $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
         }else{
           return $token;
         }
@@ -166,16 +144,12 @@ class sql {
     $this->conectar();
     if($this->conn->connect_errno){
       $obj->erro=true;
-      $obj->error->msg="Erro de conexao ao banco de dados.";
-      $obj->error->code=503;
-      $obj->error->short="Service Unavailable";
+      $obj->error=Erro("Erro de conexao ao banco de dados.",503,"Service Unavailable");
     }else{
       $result = $this->conn->query("SELECT * FROM tokens WHERE `id`='" . $id . "';");
       if(!$result){
         $obj->erro=true;
-        $obj->error->msg="Erro interno no banco de dados.";
-        $obj->error->code=500;
-        $obj->error->short="Internal Server Error";
+        $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
       }else{
         if($result->num_rows=="0"){
           $obj->id=0;
@@ -194,16 +168,12 @@ class sql {
     $this->conectar();
     if($this->conn->connect_errno){
       $obj->erro=true;
-      $obj->error->msg="Erro de conexao ao banco de dados.";
-      $obj->error->code=503;
-      $obj->error->short="Service Unavailable";
+      $obj->error=Erro("Erro de conexao ao banco de dados.",503,"Service Unavailable");
     }else{
       $result = $this->conn->query("SELECT * FROM tokens WHERE `token`='" . $token . "';");
       if(!$result){
         $obj->erro=true;
-        $obj->error->msg="Erro interno no banco de dados.";
-        $obj->error->code=500;
-        $obj->error->short="Internal Server Error";
+        $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
       }else{
         if($result->num_rows=="0"){
           $obj->id=0;
@@ -222,9 +192,7 @@ class sql {
     $this->conectar();
     if($this->conn->connect_errno){
       $obj->erro=true;
-      $obj->error->msg="Erro de conexao ao banco de dados.";
-      $obj->error->code=503;
-      $obj->error->short="Service Unavailable";
+      $obj->error=Erro("Erro de conexao ao banco de dados.",503,"Service Unavailable");
     }else{
       if(strlen($chat->cliente)>0&&strlen($chat->dados)>0){
         $result = $this->conn->query("INSERT INTO chat (`cliente`,`hora`,`tipo`,`dados`) VALUES ('" . $chat->cliente . "','" . $chat->hora . "','" . $chat->tipo . "','" . $chat->dados . "');");
@@ -236,9 +204,7 @@ class sql {
       }
       if(!$result&&!$obj->erro){
         $obj->erro=true;
-        $obj->error->msg="Erro interno no banco de dados.";
-        $obj->error->code=500;
-        $obj->error->short="Internal Server Error";
+        $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
       }
     }
     if($obj->erro){return $obj;}
@@ -251,16 +217,12 @@ class sql {
     $this->conectar();
     if($this->conn->connect_errno){
       $obj->erro=true;
-      $obj->error->msg="Erro de conexao ao banco de dados.";
-      $obj->error->code=503;
-      $obj->error->short="Service Unavailable";
+      $obj->error=Erro("Erro de conexao ao banco de dados.",503,"Service Unavailable");
     }else{
       $result = $this->conn->query("SELECT `id` FROM chat WHERE (`cliente`='" . $chat->cliente . "' AND `hora`='" . $chat->hora . "' AND `tipo`='" . $chat->tipo . "' AND `dados`='" . $chat->dados . "');");
       if(!$result&&!$obj->erro){
         $obj->erro=true;
-        $obj->error->msg="Erro interno no banco de dados.";
-        $obj->error->code=500;
-        $obj->error->short="Internal Server Error";
+        $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
       }
     }
     if($obj->erro){return $obj;}
@@ -271,9 +233,7 @@ class sql {
     $this->conectar();
     if($this->conn->connect_errno){
       $obj->erro=true;
-      $obj->error->msg="Erro de conexao ao banco de dados.";
-      $obj->error->code=503;
-      $obj->error->short="Service Unavailable";
+      $obj->error=Erro("Erro de conexao ao banco de dados.",503,"Service Unavailable");
     }else{
       if(strlen($lastupdate)>0){
         $where = " WHERE m.id > '" . $lastupdate . "'";
@@ -281,9 +241,7 @@ class sql {
       $result = $this->conn->query("SELECT m.id as lastupdate,m.hora,c.nome,m.tipo,m.dados FROM chat AS m LEFT JOIN clientes AS c ON m.cliente=c.id" . $where . ";");
       if(!$result&&!$obj->erro){
         $obj->erro=true;
-        $obj->error->msg="Erro interno no banco de dados.";
-        $obj->error->code=500;
-        $obj->error->short="Internal Server Error";
+        $obj->error=Erro("Erro interno no banco de dados.",500,"Internal Server Error");
       }
     }
     if($obj->erro){return $obj;}

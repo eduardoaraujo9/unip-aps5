@@ -42,7 +42,8 @@ class Cliente {
     if(strlen($this->email)>0){
       $cliente = $this->DAO->lerClienteEmail($this->email);
       if($cliente->erro){
-        $retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
+        //$retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
+        $retorno=$cliente->error;
       }else if($cliente->existe){
         if($cliente->senha==$this->senha){
           $token=new Token();
@@ -54,7 +55,8 @@ class Cliente {
       }else{
         $cliente=$this->salvar();
         if($cliente->erro){
-          $retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
+          //$retorno=Erro($cliente->error->msg,$cliente->error->code,$cliente->error->short);
+          $retorno=$cliente->error;
         }else{
           $token=new Token();
           $token->id=$cliente->id;
