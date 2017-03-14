@@ -34,8 +34,9 @@ if($_GET['tipo']=="login"){
 if($_GET['tipo']=="config" && $_GET['id']=="perfil"){
   $token=new Token();
   if($token->valido){
-    $cliente = new Cliente();
-    $cliente->id=$token->id;
+    //$cliente = new Cliente();
+    //$cliente->id=$token->id;
+    $cliente = new Cliente($token->id);
     $input=converterInput();
     if(count($input)>0){//foi POST
       $cliente->nome=$input->nome;
@@ -56,8 +57,9 @@ if($_GET['tipo']=="config" && $_GET['id']=="perfil"){
 if($_GET['tipo']=="msg"){
   $token=new Token();
   if($token->valido){
-    $cliente = new Cliente();
-    $cliente->id=$token->id;
+    //$cliente = new Cliente();
+    //$cliente->id=$token->id;
+    $cliente = new Cliente($token->id);
     $input=converterInput();
     $chat = new Chat();
     if(count($input)>0&&strlen($input->lastupdate)==0){//foi POST

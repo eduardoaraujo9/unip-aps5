@@ -34,8 +34,11 @@ class Cliente {
   public $lastupdate;
 
   private $DAO;
-  function __construct() {
+  function __construct($id) {
     $this->DAO = new DAO();
+    if(strlen($id)>0){
+      $this->id=$id;
+    }
   }
   
   function login(){
