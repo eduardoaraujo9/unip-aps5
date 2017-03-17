@@ -1,0 +1,52 @@
+body>div{
+height:100%;
+max-height:100%;
+overflow:hidden;
+}
+
+#chat{
+    height: calc(100vh - 54px);
+    overflow-y: scroll;
+}
+#chat .box {
+    color: white;
+    background-color: #124d80;
+    padding: 10px;
+    margin: 10px;
+    margin-bottom: 4px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 4px -1px #676586;
+	width:80%;
+	float:right;
+}
+
+#box1,
+#chat .me{
+	float:left!important;
+	background-color:green!important;
+	
+	 box-shadow: 1px 1px 4px -1px #678665!important;
+}
+#texto{
+    height: 54px;
+    width: 100%;
+	}
+#texto input{
+width:100%;
+}
+#texto textarea{
+	    resize: none;
+}
+#texto button.btnSend{
+	    height: 54px;
+    width: 89px;
+    margin: -12px;
+}
+
+#login .alert {
+	display: inline-block;
+    float: left;
+    height: 34px;
+    padding-top: 5px;
+    margin-bottom: 0;
+}
