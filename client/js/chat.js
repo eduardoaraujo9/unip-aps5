@@ -7,6 +7,7 @@ function enviar(){
 	document.getElementById('textInput').value = "";
 	document.getElementById('chat').appendChild(d)
 	document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
+document.getElementById('textInput').focus();
 }
 
 function loginErro(){
