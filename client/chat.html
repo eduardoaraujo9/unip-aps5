@@ -33,18 +33,22 @@ width:100%;
 <div class=box id=box3><p>Texto tres</div>
 </div>
 <div id=texto>
-<form action="." method="post">
-<input type=text placeholder="digite o texto">
+<form action="." method="post" onsubmit="return sendText()">
+<input type=text placeholder="digite o texto" id=formInput>
+<button type=submit value=OK></button>
 </form>
 </div>
 </div>
 
 <script type=text/javascript>
-var d=document.createElement("div");
-d.className="box"
-d.id="box4"
-d.innerHTML="<p>Texto quatro"
-document.getElementById('chat').appendChild(d)
+function sendText(){
+	var d=document.createElement("div");
+	d.className="box";
+	//d.id="box4";
+	d.innerHTML="<p>" + document.getElementById('formInput').value;
+	document.getElementById('chat').appendChild(d);
+	return false;
+}
 </script>
 </body>
 </html>
