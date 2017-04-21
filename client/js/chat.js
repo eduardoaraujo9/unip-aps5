@@ -1,13 +1,70 @@
 function enviar(){
-	/* obs: faz chamada da API, se retornar OK, então faz o processo abaixo */
-	/* se der erro (timeout) pode por exemplo, abrir a tela de login de novo */
-	var d=document.createElement("div");
-	d.className="box"
-	d.innerHTML="<p>" + document.getElementById('textInput').value;
-	document.getElementById('textInput').value = "";
-	document.getElementById('chat').appendChild(d)
-	document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
-document.getElementById('textInput').focus();
+	if(document.getElementById('textInput').value.length>0){
+		var envio={};
+		envio.dados=document.getElementById('textInput').value;
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 403) {
+				fazerLogin();
+			} else if (this.readyState == 4 && this.status == 200) {
+				var d=document.createElement("div");
+				d.className="box me"
+				d.innerHTML="<p>" + document.getElementById('textInput').value;
+				document.getElementById('textInput').value = "";
+				document.getElementById('chat').appendChild(d)
+				document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
+				/*var objDiv = document.getElementById("chat");
+				objDiv.scrollTop = objDiv.scrollHeight;*/
+				var div = document.getElementById("chat");
+				$('#chat').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
+				var res=JSON.parse(this.responseText);
+				if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
+			}				
+		};
+		xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/msg?_=" + rnd, true);
+		xhttp.setRequestHeader("Content-type","application/json");
+		xhttp.setRequestHeader("Accept","application/json");
+		xhttp.setRequestHeader("access_token",me.access_token);
+		xhttp.send(JSON.stringify(envio));
+	}
+	document.getElementById('textInput').focus();
+}
+
+function receber(){
+	if(document.getElementById('textInput').value.length>0){
+		var envio={};
+		envio.lastupdate=me.lastupdate;
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 403) {
+				fazerLogin();
+			} else if (this.readyState == 4 && this.status == 200) {
+				/*var d=document.createElement("div");
+				d.className="box"
+				d.innerHTML="<p>" + document.getElementById('textInput').value;
+				document.getElementById('textInput').value = "";
+				document.getElementById('chat').appendChild(d)
+				document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;*/
+				/*var objDiv = document.getElementById("chat");
+				objDiv.scrollTop = objDiv.scrollHeight;*/
+				var div = document.getElementById("chat");
+				$('#chat').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
+				var res=JSON.parse(this.responseText);
+				if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate};
+				console.log(res);
+			}				
+		};
+		xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/msg?_=" + rnd, true);
+		xhttp.setRequestHeader("Content-type","application/json");
+		xhttp.setRequestHeader("Accept","application/json");
+		xhttp.setRequestHeader("access_token",me.access_token);
+		xhttp.send(JSON.stringify(envio));
+		
+		/* obs: faz chamada da API, se retornar OK, então faz o processo abaixo */
+		/* se der erro (timeout) pode por exemplo, abrir a tela de login de novo */
+		
+	}
+	document.getElementById('textInput').focus();
 }
 
 function loginErro(){
@@ -25,8 +82,10 @@ function loginErro(){
 	window.setTimeout(function(){document.getElementById('login').className=document.getElementById('login').className.replace("shake","").trim()},1000);
 }
 
-var me={"email":"","senha":""}
+var me={}
+
 function login() {
+	me={}
 	me.email=document.getElementById('username').value;
 	me.senha=document.getElementById('password').value;
 	var xhttp = new XMLHttpRequest();
@@ -34,18 +93,18 @@ function login() {
 		if (this.readyState == 4 && this.status == 200) {
 			var res=JSON.parse(this.responseText)
 			me.access_token=res.access_token;
-			me.senha="";
-			getConfig();
+			delete me.senha;
+			$('#login').modal('hide');
 			document.getElementById('username').value="";
 			document.getElementById('password').value="";
-			$('#login').modal('hide');
+			getConfig();
 		} else if (this.readyState == 4 && this.status == 403) {
 			loginErro();
 		} /*else {
 			console.log("this.readyState:" + this.readyState + " status=" + this.status);
 		}*/
     };
-    xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/login", true);
+    xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/login?_=" + rnd, true);
     xhttp.setRequestHeader("Content-type","application/json");
     xhttp.setRequestHeader("Accept","application/json");
     xhttp.send(JSON.stringify(me));
@@ -56,19 +115,62 @@ function getConfig(){
 		if (this.readyState == 4 && this.status == 200) {
 			res=JSON.parse(this.responseText);
 			if(res.nome.length>0){me.nome=res.nome}
-			else{console.log("Anonimo!")}
+			else{fazerPerfil()}
 			me.lastupdate=res.lastupdate;
-			console.log("done!");
 		}
     };
-    xhttp.open("GET", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/config/perfil", true);
+    xhttp.open("GET", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/config/perfil?_=" + rnd, true);
     xhttp.setRequestHeader("access_token",me.access_token);
     xhttp.setRequestHeader("Accept","application/json");
     xhttp.send();
 }
 
+function salvarPerfil(){
+	if(document.getElementById("nomePerfil").value.length<4){
+		if(document.getElementById("perfilErro")==null){
+			var d=document.createElement("div");
+			d.className="alert alert-danger"
+			d.id="perfilErro"
+			d.setAttribute("role", "alert");
+			d.innerHTML="<strong>Nome inválido</strong>"
+			document.querySelector("#profile .modal-dialog .modal-content .modal-footer").prepend(d)
+			document.getElementById('profile').className+=" shake";
+		}else{
+			document.getElementById('profile').className+=" shake";
+		}
+		window.setTimeout(function(){document.getElementById('profile').className=document.getElementById('profile').className.replace("shake","").trim()},1000);
+	}else{
+		me.nome=document.getElementById("nomePerfil").value;
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			$('#profile').modal('hide');
+			document.getElementById("nomePerfil").value="";
+			if (this.readyState == 4 && this.status == 403) {
+				fazerLogin();
+			}
+		};
+		xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/config/perfil?_=" + rnd, true);
+		xhttp.setRequestHeader("Content-type","application/json");
+		xhttp.setRequestHeader("Accept","application/json");
+		xhttp.setRequestHeader("access_token",me.access_token);
+		xhttp.send(JSON.stringify(me));
+	}
+}
+
+function fazerLogin(){
+	$('#login').modal({backdrop: 'static', keyboard: false});
+}
+
+function fazerPerfil(){
+	$('#profile').modal({backdrop: 'static', keyboard: false});
+}
+
+rnd="";
+
 window.onload=function(){
-	$('#login').modal({backdrop: 'static', keyboard: false})  ;
+	var d=new Date();
+	rnd=btoa(d.getTime() + Math.random());
+	fazerLogin();
   //$('#myModal').modal({show:'false'}); 	
 	
 }

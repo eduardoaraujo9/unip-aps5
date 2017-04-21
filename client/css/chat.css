@@ -20,12 +20,10 @@ overflow:hidden;
 	float:right;
 }
 
-#box1,
 #chat .me{
 	float:left!important;
 	background-color:green!important;
-	
-	 box-shadow: 1px 1px 4px -1px #678665!important;
+	box-shadow: 1px 1px 4px -1px #678665!important;
 }
 #texto{
     height: 54px;
