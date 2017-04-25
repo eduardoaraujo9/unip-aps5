@@ -31,29 +31,23 @@ function enviar(){
 }
 
 function receber(){
-
-	var envio={};
-	envio.lastupdate=me.lastupdate;
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 403) {
 			fazerLogin();
 		} else if (this.readyState == 4 && this.status == 200) {
-			/*var d=document.createElement("div");
-			d.className="box"
-			d.innerHTML="<p>" + document.getElementById('textInput').value;
-			document.getElementById('textInput').value = "";
-			document.getElementById('chat').appendChild(d)
-			document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;*/
-			/*var objDiv = document.getElementById("chat");
-			objDiv.scrollTop = objDiv.scrollHeight;*/
 			var div = document.getElementById("chat");
 			$('#chat').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
 			var res=JSON.parse(this.responseText);
-			if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate};
-			console.log(res);
-				/* tem que iterar a response:
-
+			for(i=0;i<res.length;i++){
+				var d=document.createElement("div");
+				d.className="box"
+				d.innerHTML="<p>" + res[i]["nome"] + ": " + res[i]["dados"];
+				document.getElementById('textInput').value = "";
+				document.getElementById('chat').appendChild(d)
+				document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
+			}
+				/* JSON response:
 				  {
 					"lastupdate": "1",
 					"hora": "2017-03-06 21:06:21",
@@ -61,14 +55,6 @@ function receber(){
 					"tipo": "0",
 					"dados": "mensagem de teste"
 				  },
-				  {
-					"lastupdate": "2",
-					"hora": "2017-03-06 21:08:40",
-					"nome": "Eduardo Araujo",
-					"tipo": "0",
-					"dados": "mensagem de teste 2"
-				  },
-				  
 				*/
 
 		}				
@@ -77,8 +63,7 @@ function receber(){
 	xhttp.setRequestHeader("Content-type","application/json");
 	xhttp.setRequestHeader("Accept","application/json");
 	xhttp.setRequestHeader("access_token",me.access_token);
-	xhttp.send(JSON.stringify(envio));
-
+	xhttp.send();
 }
 
 function loginErro(){
@@ -98,6 +83,9 @@ function loginErro(){
 
 var me={};
 var rnd="";
+var atualizaChat="";
+var d=new Date();
+
 function login() {
 	rnd=btoa(d.getTime() + Math.random());
 	me={}
@@ -129,7 +117,7 @@ function getConfig(){
     xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			res=JSON.parse(this.responseText);
-			if(res.nome.length>0){me.nome=res.nome}
+			if(res.nome.length>0){me.nome=res.nome;fazerAtualizacao()}
 			else{fazerPerfil()}
 			me.lastupdate=res.lastupdate;
 		}
@@ -160,6 +148,7 @@ function salvarPerfil(){
 		xhttp.onreadystatechange = function() {
 			$('#profile').modal('hide');
 			document.getElementById("nomePerfil").value="";
+			fazerAtualizacao();
 			if (this.readyState == 4 && this.status == 403) {
 				fazerLogin();
 			}
@@ -174,14 +163,18 @@ function salvarPerfil(){
 
 function fazerLogin(){
 	$('#login').modal({backdrop: 'static', keyboard: false});
+	clearInterval(atualizaChat);
 }
 
 function fazerPerfil(){
 	$('#profile').modal({backdrop: 'static', keyboard: false});
 }
 
+function fazerAtualizacao(){
+	atualizaChat = setInterval(receber, 3000);
+}
+
 window.onload=function(){
-	var d=new Date();
 	fazerLogin();
   //$('#myModal').modal({show:'false'}); 	
 	
