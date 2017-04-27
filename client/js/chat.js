@@ -21,7 +21,7 @@ function enviar(){
 				if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
 			}				
 		};
-		xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/msg?_=" + rnd, true);
+		xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/msg?_=" + rnd(), true);
 		xhttp.setRequestHeader("Content-type","application/json");
 		xhttp.setRequestHeader("Accept","application/json");
 		xhttp.setRequestHeader("access_token",me.access_token);
@@ -59,7 +59,7 @@ function receber(){
 
 		}				
 	};
-	xhttp.open("GET", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/msg?_=" + rnd, true);
+	xhttp.open("GET", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/msg?_=" + rnd(), true);
 	xhttp.setRequestHeader("Content-type","application/json");
 	xhttp.setRequestHeader("Accept","application/json");
 	xhttp.setRequestHeader("access_token",me.access_token);
@@ -82,12 +82,13 @@ function loginErro(){
 }
 
 var me={};
-var rnd="";
 var atualizaChat="";
 var d=new Date();
+function rnd(){
+	return btoa(d.getTime() + Math.random());
+}
 
 function login() {
-	rnd=btoa(d.getTime() + Math.random());
 	me={}
 	me.email=document.getElementById('username').value;
 	me.senha=document.getElementById('password').value;
@@ -107,7 +108,7 @@ function login() {
 			console.log("this.readyState:" + this.readyState + " status=" + this.status);
 		}*/
     };
-    xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/login?_=" + rnd, true);
+    xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/login?_=" + rnd(), true);
     xhttp.setRequestHeader("Content-type","application/json");
     xhttp.setRequestHeader("Accept","application/json");
     xhttp.send(JSON.stringify(me));
@@ -122,7 +123,7 @@ function getConfig(){
 			me.lastupdate=res.lastupdate;
 		}
     };
-    xhttp.open("GET", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/config/perfil?_=" + rnd, true);
+    xhttp.open("GET", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/config/perfil?_=" + rnd(), true);
     xhttp.setRequestHeader("access_token",me.access_token);
     xhttp.setRequestHeader("Accept","application/json");
     xhttp.send();
@@ -153,7 +154,7 @@ function salvarPerfil(){
 				fazerLogin();
 			}
 		};
-		xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/config/perfil?_=" + rnd, true);
+		xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/config/perfil?_=" + rnd(), true);
 		xhttp.setRequestHeader("Content-type","application/json");
 		xhttp.setRequestHeader("Accept","application/json");
 		xhttp.setRequestHeader("access_token",me.access_token);
