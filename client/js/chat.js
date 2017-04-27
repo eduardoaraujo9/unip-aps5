@@ -43,7 +43,6 @@ function receber(){
 				var d=document.createElement("div");
 				d.className="box"
 				d.innerHTML="<p>" + res[i]["nome"] + ": " + res[i]["dados"];
-				document.getElementById('textInput').value = "";
 				document.getElementById('chat').appendChild(d)
 				document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
 			}
