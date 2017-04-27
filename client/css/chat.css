@@ -28,6 +28,8 @@ overflow:hidden;
 #texto{
     height: 54px;
     width: 100%;
+position: absolute;
+bottom:0;
 	}
 #texto input{
 width:100%;

@@ -1,5 +1,5 @@
 function enviar(){
-	if(document.getElementById('textInput').value.length>0){
+	if(document.getElementById('textInput').value.trim.length>0){
 		var envio={};
 		envio.dados=document.getElementById('textInput').value;
 		var xhttp = new XMLHttpRequest();
