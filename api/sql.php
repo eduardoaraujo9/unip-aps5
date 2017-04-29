@@ -94,7 +94,7 @@ class sql {
         $obj->erro=true;
         $obj->error=Erro("Requisicao errada, faltam os parametros.",300,"Bad Request", "<nome>,<email>,<senha>");
       }else{
-        $result = $this->conn->query("INSERT INTO clientes (`nome`,`email`,`senha`) VALUES ('" . $cliente->nome . "','" . $cliente->email . "','" . $cliente->senha . "');");
+        $result = $this->conn->query("INSERT INTO clientes (`nome`,`email`,`senha`,`lastupdate`) VALUES ('" . $cliente->nome . "','" . $cliente->email . "','" . $cliente->senha . "', (SELECT `id` FROM `chat` ORDER BY `id` DESC LIMIT 1));");
       }
       if(!$result&&!$obj->erro){
         $obj->erro=true;

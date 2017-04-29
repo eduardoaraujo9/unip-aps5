@@ -1,48 +1,68 @@
+body{overflow:hidden}
 body>div{
 height:100%;
 max-height:100%;
 overflow:hidden;
 }
 
-#chat{
-    height: calc(100vh - 54px);
-    overflow-y: scroll;
+#wrapper{
+	display: table-cell;
+    vertical-align: bottom;
 }
+#chat{
+    height: calc(100vh - 51px);
+    overflow-y: scroll;
+    padding-bottom: 8px;
+    width: 100vw;
+}
+
 #chat .box {
     color: white;
-    background-color: #124d80;
+    background-color: green;
     padding: 10px;
     margin: 10px;
     margin-bottom: 4px;
     border-radius: 5px;
-    box-shadow: 1px 1px 4px -1px #676586;
+    box-shadow: 1px 1px 4px -1px #678665;
 	width:80%;
-	float:right;
+	float:left;
 }
 
 #chat .me{
-	float:left!important;
-	background-color:green!important;
-	box-shadow: 1px 1px 4px -1px #678665!important;
+	float:right!important;
+	background-color:#124d80!important;
+	box-shadow:1px 1px 4px -1px #676586!important;
 }
 #texto{
+    display: block;
     height: 54px;
-    width: 100%;
-position: absolute;
-bottom:0;
+    width: calc(100vw +3px);
 	}
 #texto input{
 width:100%;
 }
 #texto textarea{
 	    resize: none;
+		border-radius:0;
 }
 #texto button.btnSend{
 	    height: 54px;
     width: 89px;
-    margin: -12px;
+    /*margin: -12px;*/
+    margin: 0;
+    padding: 0;
+    border: 0;	
+	border-radius:0;
 }
-
+#basic-addon3{
+    padding-top: 0;
+    padding-bottom: 0;
+    border-left: 0;
+    border-right: 0;	
+}
+#basic-addon2 {
+    padding: 0;
+}
 #login .alert {
 	display: inline-block;
     float: left;

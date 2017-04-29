@@ -9,7 +9,7 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/chat.css?v=0.1" rel="stylesheet">
+    <link href="css/chat.css?v=0.4n" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -20,15 +20,14 @@
     <![endif]-->
   </head>
   <body>
-	<div id=chat>
-		<!--div class=box ><p>Texto um</div>
-		<div class=box ><p>Texto dois</div>-->
-	</div>
+  <div id=wrapper>
+	<div id=chat></div>
+</div>
 	<div id=texto>
 		<div class="input-group">
   <!--<input type="text" class="form-control" placeholder="Digite o texto aqui." aria-describedby="basic-addon2">-->
 		<textarea class="form-control" placeholder="Digite o texto aqui." id=textInput></textarea>
-		<span class="input-group-addon"><i class="glyphicon glyphicon-paperclip"></i></span>
+		<span class="input-group-addon" id="basic-addon3"><i class="glyphicon glyphicon-paperclip"></i></span>
 		<span class="input-group-addon" id="basic-addon2"><button type="button" class="btnSend btn btn-primary" onclick="enviar()">Enviar</button></span>
 </div>
 		
@@ -92,6 +91,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/chat.js?v=0.1.2"></script>
+    <script src="js/chat.js?v=0.1.7g"></script>
   </body>
 </html>

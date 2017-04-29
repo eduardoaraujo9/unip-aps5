@@ -1,31 +1,36 @@
 function enviar(){
-	if(document.getElementById('textInput').value.trim.length>0){
-		var envio={};
-		envio.dados=document.getElementById('textInput').value;
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 403) {
-				fazerLogin();
-			} else if (this.readyState == 4 && this.status == 200) {
-				var d=document.createElement("div");
-				d.className="box me"
-				d.innerHTML="<p>" + document.getElementById('textInput').value;
-				document.getElementById('textInput').value = "";
-				document.getElementById('chat').appendChild(d)
-				document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
-				/*var objDiv = document.getElementById("chat");
-				objDiv.scrollTop = objDiv.scrollHeight;*/
-				var div = document.getElementById("chat");
-				$('#chat').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
-				var res=JSON.parse(this.responseText);
-				if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
-			}				
-		};
-		xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/msg?_=" + rnd(), true);
-		xhttp.setRequestHeader("Content-type","application/json");
-		xhttp.setRequestHeader("Accept","application/json");
-		xhttp.setRequestHeader("access_token",me.access_token);
-		xhttp.send(JSON.stringify(envio));
+	if(document.getElementById('textInput').value.trim().length>0){
+		if(!sending){
+			var envio={};
+			envio.dados=document.getElementById('textInput').value;
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 403) {
+					fazerLogin();
+				} else if (this.readyState == 4 && this.status == 200) {
+					var d=document.createElement("div");
+					d.className="box me"
+					d.innerHTML="<p>" + document.getElementById('textInput').value;
+					document.getElementById('textInput').value = "";
+					document.getElementById('chat').appendChild(d)
+					//document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
+					/*var objDiv = document.getElementById("chat");
+					objDiv.scrollTop = objDiv.scrollHeight;*/
+					var div = document.getElementById("chat");
+					$('#chat').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
+					var res=JSON.parse(this.responseText);
+					if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
+				}				
+				sending=false;
+			};
+			xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/msg?_=" + rnd(), true);
+			xhttp.setRequestHeader("Content-type","application/json");
+			xhttp.setRequestHeader("Accept","application/json");
+			xhttp.setRequestHeader("access_token",me.access_token);
+			xhttp.send(JSON.stringify(envio));
+		}
+	}else{
+		document.getElementById('textInput').value = "";
 	}
 	document.getElementById('textInput').focus();
 }
@@ -36,26 +41,23 @@ function receber(){
 		if (this.readyState == 4 && this.status == 403) {
 			fazerLogin();
 		} else if (this.readyState == 4 && this.status == 200) {
-			var div = document.getElementById("chat");
-			$('#chat').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
 			var res=JSON.parse(this.responseText);
-			for(i=0;i<res.length;i++){
-				var d=document.createElement("div");
-				d.className="box"
-				d.innerHTML="<p>" + res[i]["nome"] + ": " + res[i]["dados"];
-				document.getElementById('chat').appendChild(d)
-				document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
+			if(!res.hasOwnProperty('lastupdate')){
+				for(i=0;i<res.length;i++){
+					var d=document.createElement("div");
+					d.className="box"
+					d.innerHTML="<p>" + res[i]["nome"] + ": " + res[i]["dados"];
+					document.getElementById('chat').appendChild(d)
+					//document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
+					me.lastupdate=res[i].lastupdate;
+					if(heat<20){heat++}
+				}
+				var div = document.getElementById("chat");
+				$('#chat').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
+			}else{
+				if(heat>0){heat--}
 			}
-				/* JSON response:
-				  {
-					"lastupdate": "1",
-					"hora": "2017-03-06 21:06:21",
-					"nome": "Eduardo Araujo",
-					"tipo": "0",
-					"dados": "mensagem de teste"
-				  },
-				*/
-
+			proximoReceber();
 		}				
 	};
 	xhttp.open("GET", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/msg?_=" + rnd(), true);
@@ -82,6 +84,8 @@ function loginErro(){
 
 var me={};
 var atualizaChat="";
+var sending=false;
+var heat=0;
 var d=new Date();
 function rnd(){
 	return btoa(d.getTime() + Math.random());
@@ -117,7 +121,7 @@ function getConfig(){
     xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			res=JSON.parse(this.responseText);
-			if(res.nome.length>0){me.nome=res.nome;fazerAtualizacao()}
+			if(res.nome.length>0){me.nome=res.nome;receber()}
 			else{fazerPerfil()}
 			me.lastupdate=res.lastupdate;
 		}
@@ -148,7 +152,7 @@ function salvarPerfil(){
 		xhttp.onreadystatechange = function() {
 			$('#profile').modal('hide');
 			document.getElementById("nomePerfil").value="";
-			fazerAtualizacao();
+			receber();
 			if (this.readyState == 4 && this.status == 403) {
 				fazerLogin();
 			}
@@ -170,8 +174,13 @@ function fazerPerfil(){
 	$('#profile').modal({backdrop: 'static', keyboard: false});
 }
 
-function fazerAtualizacao(){
-	atualizaChat = setInterval(receber, 3000);
+function proximoReceber(){
+	if(heat>5){atualizaChat=setTimeout(receber,250)}
+	else if(heat>4){atualizaChat=setTimeout(receber,500)}
+	else if(heat>3){atualizaChat=setTimeout(receber,750)}
+	else if(heat>2){atualizaChat=setTimeout(receber,1000)}
+	else if(heat>1){atualizaChat=setTimeout(receber,2000)}
+	else{atualizaChat=setTimeout(receber,3000)}
 }
 
 window.onload=function(){
