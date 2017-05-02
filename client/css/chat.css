@@ -1,4 +1,4 @@
-body{overflow:hidden}
+/*body{overflow:hidden}*/
 body>div{
 height:100%;
 max-height:100%;
@@ -6,14 +6,16 @@ overflow:hidden;
 }
 
 #wrapper{
-	display: table-cell;
-    vertical-align: bottom;
+	/*display: table-cell;
+    vertical-align: bottom;*/
 }
 #chat{
-    height: calc(100vh - 51px);
+    height: calc(100vh - 54px);
     overflow-y: scroll;
     padding-bottom: 8px;
     width: 100vw;
+	display: table-cell;
+    vertical-align: bottom;
 }
 
 #chat .box {
@@ -36,7 +38,7 @@ overflow:hidden;
 #texto{
     display: block;
     height: 54px;
-    width: calc(100vw +3px);
+    width: 100vw;
 	}
 #texto input{
 width:100%;
@@ -44,6 +46,17 @@ width:100%;
 #texto textarea{
 	    resize: none;
 		border-radius:0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;	
+}
+#texto textarea:focus{
+	outline:0;
+    border-color: #cccccc;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 #texto button.btnSend{
 	    height: 54px;
@@ -57,11 +70,14 @@ width:100%;
 #basic-addon3{
     padding-top: 0;
     padding-bottom: 0;
-    border-left: 0;
-    border-right: 0;	
+    border-left: 0;	
+    background-color: white;
+    color: #cccccc;	
 }
 #basic-addon2 {
     padding: 0;
+	border-radius: 0;
+    border-right: 0;
 }
 #login .alert {
 	display: inline-block;
@@ -70,3 +86,4 @@ width:100%;
     padding-top: 5px;
     margin-bottom: 0;
 }
+input#username{text-transform: lowercase}

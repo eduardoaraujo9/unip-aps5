@@ -43,7 +43,7 @@ class Cliente {
   
   function login(){
     if(strlen($this->email)>0){
-      $cliente = $this->DAO->lerClienteEmail($this->email);
+      $cliente = $this->DAO->lerClienteEmail(strtolower($this->email));
       if($cliente->erro){
         $retorno=$cliente->error;
       }else if($cliente->existe){
@@ -71,7 +71,7 @@ class Cliente {
   }
   
   function ler(){
-    if(strlen($this->email)>0){return $this->DAO->lerClienteEmail($this->email);}
+    if(strlen($this->email)>0){return $this->DAO->lerClienteEmail(strtolower($this->email));}
     elseif(strlen($this->id)>0){return $this->DAO->lerClienteId($this->id);}
     else{return Erro("Erro interno",500,"Internal Server Error");}
   }
