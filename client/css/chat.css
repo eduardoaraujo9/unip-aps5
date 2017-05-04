@@ -68,16 +68,22 @@ width:100%;
 	border-radius:0;
 }
 #basic-addon3{
+padding-left: 16px;
+    padding-right: 16px;
+
     padding-top: 0;
     padding-bottom: 0;
     border-left: 0;	
     background-color: white;
     color: #cccccc;	
+    border-bottom: 0;
 }
 #basic-addon2 {
     padding: 0;
 	border-radius: 0;
     border-right: 0;
+    border-bottom: 0;
+border-top:0;
 }
 #login .alert {
 	display: inline-block;
@@ -87,3 +93,4 @@ width:100%;
     margin-bottom: 0;
 }
 input#username{text-transform: lowercase}
+input#anexo{display:none}

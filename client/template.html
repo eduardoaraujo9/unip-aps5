@@ -5,11 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+
     <title>APS Chat</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/chat.css?v=0.5c" rel="stylesheet">
+    <link href="css/chat.css?v=0.5e" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -24,20 +28,21 @@
 	<div id=chat></div>
 </div>
 	<div id=texto>
+<form action="." method="post" onsubmit="return false;">
+ <input type="file" id="anexo" name="photo[]" onchange="alert('Recurso sendo implementado');" />
 		<div class="input-group">
-  <!--<input type="text" class="form-control" placeholder="Digite o texto aqui." aria-describedby="basic-addon2">-->
 		<textarea class="form-control" placeholder="Digite o texto aqui." id=textInput></textarea>
-		<span class="input-group-addon" id="basic-addon3"><i class="glyphicon glyphicon-paperclip"></i></span>
+		<label for=anexo class="input-group-addon" id="basic-addon3"><i id=anexobtn class="glyphicon glyphicon-paperclip"></i></label>
 		<span class="input-group-addon" id="basic-addon2"><button type="button" class="btnSend btn btn-primary" onclick="enviar()">Enviar</button></span>
 </div>
 		
+</form>
 	</div>
-	
 
 <!-- Modal -->
 <div id="login" class="modal fade animated" role="dialog">
   <div class="modal-dialog modal-sm">
-
+<form action="." method="post" onsubmit="return login();">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -45,6 +50,7 @@
         <h4 class="modal-title">Faça seu login</h4>
       </div>
       <div class="modal-body">
+
 		<div class="input-group">
 		  <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-envelope"></i></span>
 		  <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1" id=username autocorrect="off" autocapitalize="none">
@@ -53,19 +59,20 @@
 		  <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-lock"></i></span>
 		  <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1" id=password autocorrect="off" autocapitalize="none">
 		</div>
+
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" onclick="login()"><i class="glyphicon glyphicon-log-in"></i> Login</button>
+        <button type="submit" class="btn btn-success" ><i class="glyphicon glyphicon-log-in"></i> Login</button>
       </div>
     </div>
-
+</form>
   </div>
 </div>
 
 <!-- Modal -->
 <div id="profile" class="modal fade animated" role="dialog">
   <div class="modal-dialog modal-sm">
-
+<form action="." method="post" onsubmit="return salvarPerfil();">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -80,10 +87,10 @@
       </div>
       <div class="modal-footer">
         <!--<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i> Cancelar</button>-->
-        <button type="button" class="btn btn-success" onclick="salvarPerfil()"><i class="glyphicon glyphicon-ok"></i> Salvar</button>
+        <button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> Salvar</button>
       </div>
     </div>
-
+</form>
   </div>
 </div>
 
@@ -91,6 +98,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/chat.js?v=0.1.7g"></script>
+    <script src="js/chat.js?v=0.1.8k"></script>
   </body>
 </html>

@@ -1,3 +1,6 @@
+var api_url = "http://unip.nunes.net.br/CC5/APS/unip-aps5/api";
+api_url = "http://35.185.105.8/unip-aps5/api";
+
 function enviar(){
 	if(document.getElementById('textInput').value.trim().length>0){
 		if(!sending){
@@ -23,7 +26,7 @@ function enviar(){
 				}				
 				sending=false;
 			};
-			xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/msg?_=" + rnd(), true);
+			xhttp.open("POST", api_url + "/msg?_=" + rnd(), true);
 			xhttp.setRequestHeader("Content-type","application/json");
 			xhttp.setRequestHeader("Accept","application/json");
 			xhttp.setRequestHeader("access_token",me.access_token);
@@ -60,7 +63,7 @@ function receber(){
 			proximoReceber();
 		}				
 	};
-	xhttp.open("GET", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/msg?_=" + rnd(), true);
+	xhttp.open("GET", api_url + "/msg?_=" + rnd(), true);
 	xhttp.setRequestHeader("Content-type","application/json");
 	xhttp.setRequestHeader("Accept","application/json");
 	xhttp.setRequestHeader("access_token",me.access_token);
@@ -111,10 +114,11 @@ function login() {
 			console.log("this.readyState:" + this.readyState + " status=" + this.status);
 		}*/
     };
-    xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/login?_=" + rnd(), true);
+    xhttp.open("POST", api_url + "/login?_=" + rnd(), true);
     xhttp.setRequestHeader("Content-type","application/json");
     xhttp.setRequestHeader("Accept","application/json");
     xhttp.send(JSON.stringify(me));
+    return false;
 }
 function getConfig(){
     var xhttp = new XMLHttpRequest();
@@ -126,7 +130,7 @@ function getConfig(){
 			me.lastupdate=res.lastupdate;
 		}
     };
-    xhttp.open("GET", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/config/perfil?_=" + rnd(), true);
+    xhttp.open("GET", api_url + "/config/perfil?_=" + rnd(), true);
     xhttp.setRequestHeader("access_token",me.access_token);
     xhttp.setRequestHeader("Accept","application/json");
     xhttp.send();
@@ -157,12 +161,13 @@ function salvarPerfil(){
 				fazerLogin();
 			}
 		};
-		xhttp.open("POST", "http://unip.nunes.net.br/CC5/APS/unip-aps5/api/config/perfil?_=" + rnd(), true);
+		xhttp.open("POST", api_url + "/config/perfil?_=" + rnd(), true);
 		xhttp.setRequestHeader("Content-type","application/json");
 		xhttp.setRequestHeader("Accept","application/json");
 		xhttp.setRequestHeader("access_token",me.access_token);
 		xhttp.send(JSON.stringify(me));
 	}
+	return false;
 }
 
 function fazerLogin(){
@@ -184,7 +189,9 @@ function proximoReceber(){
 }
 
 window.onload=function(){
+window.scrollTo(0,document.body.scrollHeight);
 	fazerLogin();
   //$('#myModal').modal({show:'false'}); 	
 	
 }
+window.scrollTo(0,1);
