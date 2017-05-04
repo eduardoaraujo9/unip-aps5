@@ -1,6 +1,6 @@
 {
   "short_name": "ChatWeb",
-  "name": "ChatWeb",
+  "name": "ChatWeb - APS da Unip",
   "icons": [
     {
       "src": "launcher-icon-4x.png",
@@ -8,7 +8,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "template.html",
+  "start_url": "index.html",
   "display": "standalone",
   "orientation": "portrait"
 }
