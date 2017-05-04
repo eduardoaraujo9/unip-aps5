@@ -1,5 +1,5 @@
 var api_url = "http://unip.nunes.net.br/CC5/APS/unip-aps5/api";
-api_url = "http://35.185.105.8/unip-aps5/api";
+api_url = "http://unip.now.im/api";
 
 function enviar(){
 	if(document.getElementById('textInput').value.trim().length>0){
