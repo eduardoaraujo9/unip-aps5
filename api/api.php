@@ -158,7 +158,7 @@ $retorno = "Arquivo enviado";
 } catch (RuntimeException $e) {
 
 //    echo $e->getMessage();
-$retorno = Erro($e->getMessage(),400,"Bad Request");
+$retorno = Erro($e->getMessage());
 }
 
   }else{
