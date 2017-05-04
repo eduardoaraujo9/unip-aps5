@@ -103,7 +103,7 @@ function returnHTML($retorno){
 	header('Content-Type: text/html');
 	echo "<html>"
 		. "<head>"
-			. "<title>ChatAPI</title>"
+			. "<title>ChatNow - APS Unip</title>"
 			. folhaCSS()
 		. "</head>"
 		. "<body>"

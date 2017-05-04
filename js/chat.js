@@ -86,6 +86,7 @@ function loginErro(){
 }
 
 var me={};
+me.access_token=getCookie("access_token");
 var atualizaChat="";
 var sending=false;
 var heat=0;
@@ -103,6 +104,7 @@ function login() {
 		if (this.readyState == 4 && this.status == 200) {
 			var res=JSON.parse(this.responseText)
 			me.access_token=res.access_token;
+			document.cookie = "access_token="+me.access_token;
 			delete me.senha;
 			$('#login').modal('hide');
 			document.getElementById('username').value="";
@@ -114,7 +116,7 @@ function login() {
 			console.log("this.readyState:" + this.readyState + " status=" + this.status);
 		}*/
     };
-    xhttp.open("POST", api_url + "/login?_=" + rnd(), true);
+	xhttp.open("POST", api_url + "/login?_=" + rnd(), true);
     xhttp.setRequestHeader("Content-type","application/json");
     xhttp.setRequestHeader("Accept","application/json");
     xhttp.send(JSON.stringify(me));
@@ -130,7 +132,7 @@ function getConfig(){
 			me.lastupdate=res.lastupdate;
 		}
     };
-    xhttp.open("GET", api_url + "/config/perfil?_=" + rnd(), true);
+	xhttp.open("GET", api_url + "/config/perfil?_=" + rnd(), true);
     xhttp.setRequestHeader("access_token",me.access_token);
     xhttp.setRequestHeader("Accept","application/json");
     xhttp.send();
@@ -188,10 +190,26 @@ function proximoReceber(){
 	else{atualizaChat=setTimeout(receber,3000)}
 }
 
-window.onload=function(){
-window.scrollTo(0,document.body.scrollHeight);
-	fazerLogin();
-  //$('#myModal').modal({show:'false'}); 	
-	
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
-window.scrollTo(0,1);
+
+window.onload=function(){
+//	fazerLogin();
+	getConfig();
+  //$('#myModal').modal({show:'false'}); 	
+// document.cookie="username=John Doe";	
+}
