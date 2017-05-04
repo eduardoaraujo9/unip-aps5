@@ -1,5 +1,6 @@
 var api_url = "http://unip.nunes.net.br/CC5/APS/unip-aps5/api";
 api_url = "http://unip.now.im/api";
+api_url = location + "/api";
 
 function enviar(){
 	if(document.getElementById('textInput').value.trim().length>0){
@@ -131,6 +132,7 @@ function getConfig(){
 			else{fazerPerfil()}
 			me.lastupdate=res.lastupdate;
 		}
+     if (this.readyState == 4 && this.status == 403) {                                                         fazerLogin();                                                                             }
     };
 	xhttp.open("GET", api_url + "/config/perfil?_=" + rnd(), true);
     xhttp.setRequestHeader("access_token",me.access_token);
@@ -208,6 +210,7 @@ function getCookie(cname) {
 }
 
 window.onload=function(){
+//alert(location);
 //	fazerLogin();
 	getConfig();
   //$('#myModal').modal({show:'false'}); 	
