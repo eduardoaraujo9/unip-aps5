@@ -36,6 +36,40 @@ function enviar(){
 	document.getElementById('textInput').focus();
 }
 
+function enviar2(){
+			var envio={};
+			envio.dados=document.getElementById('textInput').value;
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function(){
+				if (this.readyState == 4 && this.status == 403) {
+					fazerLogin();
+					enviar();
+				} else if (this.readyState == 4 && this.status == 200) {
+					var d=document.createElement("div");
+					d.className="box me"
+					d.innerHTML="<p>" + document.getElementById('textInput').value;
+					document.getElementById('textInput').value = "";
+					document.getElementById('chat').appendChild(d)
+					//document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
+					/*var objDiv = document.getElementById("chat");
+					objDiv.scrollTop = objDiv.scrollHeight;*/
+					var div = document.getElementById("chat");
+					$('#chat').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
+					var res=JSON.parse(this.responseText);
+					if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
+				}				
+				sending=false;
+			};
+			xhttp.open("POST", api_url + "/msg?_=" + rnd(), true);
+			xhttp.setRequestHeader("Content-type","application/json");
+			xhttp.setRequestHeader("Accept","application/json");
+			xhttp.setRequestHeader("access_token",me.access_token);
+			xhttp.send(JSON.stringify(envio));
+		
+
+	document.getElementById('textInput').focus();	
+	
+}
 function receber(){
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
@@ -207,8 +241,9 @@ function getCookie(cname) {
     }
     return "";
 }
-
+function debug(){
+	alert("teste");
+}
 window.onload=function(){
-//	fazerLogin();
 	getConfig();
 }
