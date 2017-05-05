@@ -209,5 +209,6 @@ function getCookie(cname) {
 }
 
 window.onload=function(){
+//	fazerLogin();
 	getConfig();
 }
