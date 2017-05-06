@@ -136,7 +136,7 @@ function getConfig(){
     xhttp.send();
 }
 
-var tmp=[];
+var debug=[];
 function ajaxup(){
 	var formData = new FormData();
 	var file = document.getElementById('anexo').files[0];
@@ -156,7 +156,7 @@ function ajaxup(){
 					$('#wrapper').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
 					var res=JSON.parse(this.responseText);
 					if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
-			tmp=this;		
+			debug=this;		
 			//console.log("this.readyState:" + this.readyState + " status=" + this.status + " response=" + this.responseText);
 		}
 

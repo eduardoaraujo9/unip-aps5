@@ -46,11 +46,27 @@ overflow:hidden;
 	float:left;
 }
 
+#chat .box.img{
+	width:initial;
+    float: left;
+    margin-left: 80%;
+}
+
 #chat .me{
 	float:right!important;
 	background-color:#124d80!important;
 	box-shadow:1px 1px 4px -1px #676586!important;
 }
+#chat .box.img.me{
+margin-left:0!important;
+margin-right:80%;
+}
+#chat .img img {
+    max-height: 200px;
+    max-width: 200px;
+	margin: 8px;
+}
+
 #texto{
     display: block;
     height: 54px;
