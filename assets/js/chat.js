@@ -17,8 +17,8 @@ function enviar(){
 					//document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
 					/*var objDiv = document.getElementById("chat");
 					objDiv.scrollTop = objDiv.scrollHeight;*/
-					var div = document.getElementById("chat");
-					$('#chat').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
+					var div = document.getElementById("wrapper");
+					$('#wrapper').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
 					var res=JSON.parse(this.responseText);
 					if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
 				}				
@@ -53,8 +53,8 @@ function enviar2(){
 					//document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
 					/*var objDiv = document.getElementById("chat");
 					objDiv.scrollTop = objDiv.scrollHeight;*/
-					var div = document.getElementById("chat");
-					$('#chat').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
+					var div = document.getElementById("wrapper");
+					$('#wrapper').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
 					var res=JSON.parse(this.responseText);
 					if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
 				}				
@@ -87,8 +87,8 @@ function receber(){
 					me.lastupdate=res[i].lastupdate;
 					if(heat<20){heat++}
 				}
-				var div = document.getElementById("chat");
-				$('#chat').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
+				var div = document.getElementById("wrapper");
+				$('#wrapper').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
 			}else{
 				if(heat>0){heat--}
 			}
@@ -123,7 +123,8 @@ var atualizaChat="";
 var sending=false;
 var heat=0;
 var d=new Date();
-var api_url = location.href + "api";
+var api_url = location.href.replace("index.html","") + "api";
+//api_url="http://unip.now.im/api";
 function rnd(){
 	return btoa(d.getTime() + Math.random());
 }
@@ -171,6 +172,28 @@ function getConfig(){
     xhttp.setRequestHeader("access_token",me.access_token);
     xhttp.setRequestHeader("Accept","application/json");
     xhttp.send();
+}
+
+function ajaxup(){
+	var formData = new FormData();
+	var file = document.getElementById('anexo').files[0];
+	formData.append('file[]', file, file.name);
+
+	var xhr = new XMLHttpRequest();
+
+	xhr.onreadystatechange = function(){
+		if (this.readyState == 4){
+			console.log("this.readyState:" + this.readyState + " status=" + this.status + " response=" + this.responseText);
+		}
+
+	}
+
+	xhr.open('POST', api_url + "/envio?_=" + rnd(), true);
+    xhr.setRequestHeader("access_token",me.access_token);
+    xhr.setRequestHeader("Accept","application/json");
+
+	xhr.send(formData);
+
 }
 
 function salvarPerfil(){
@@ -241,9 +264,9 @@ function getCookie(cname) {
     }
     return "";
 }
-function debug(){
-	alert("teste");
-}
+
+
 window.onload=function(){
-	getConfig();
+	if(me.access_token.length==0){fazerLogin()}
+	else{getConfig()}
 }
