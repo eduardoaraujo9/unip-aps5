@@ -14,9 +14,6 @@ function enviar(){
 					d.innerHTML="<p>" + document.getElementById('textInput').value;
 					document.getElementById('textInput').value = "";
 					document.getElementById('chat').appendChild(d)
-					//document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
-					/*var objDiv = document.getElementById("chat");
-					objDiv.scrollTop = objDiv.scrollHeight;*/
 					var div = document.getElementById("wrapper");
 					$('#wrapper').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
 					var res=JSON.parse(this.responseText);
@@ -36,40 +33,6 @@ function enviar(){
 	document.getElementById('textInput').focus();
 }
 
-function enviar2(){
-			var envio={};
-			envio.dados=document.getElementById('textInput').value;
-			var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function(){
-				if (this.readyState == 4 && this.status == 403) {
-					fazerLogin();
-					enviar();
-				} else if (this.readyState == 4 && this.status == 200) {
-					var d=document.createElement("div");
-					d.className="box me"
-					d.innerHTML="<p>" + document.getElementById('textInput').value;
-					document.getElementById('textInput').value = "";
-					document.getElementById('chat').appendChild(d)
-					//document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
-					/*var objDiv = document.getElementById("chat");
-					objDiv.scrollTop = objDiv.scrollHeight;*/
-					var div = document.getElementById("wrapper");
-					$('#wrapper').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
-					var res=JSON.parse(this.responseText);
-					if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
-				}				
-				sending=false;
-			};
-			xhttp.open("POST", api_url + "/msg?_=" + rnd(), true);
-			xhttp.setRequestHeader("Content-type","application/json");
-			xhttp.setRequestHeader("Accept","application/json");
-			xhttp.setRequestHeader("access_token",me.access_token);
-			xhttp.send(JSON.stringify(envio));
-		
-
-	document.getElementById('textInput').focus();	
-	
-}
 function receber(){
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
@@ -124,7 +87,6 @@ var sending=false;
 var heat=0;
 var d=new Date();
 var api_url = location.href.replace("index.html","") + "api";
-//api_url="http://unip.now.im/api";
 function rnd(){
 	return btoa(d.getTime() + Math.random());
 }
@@ -174,6 +136,7 @@ function getConfig(){
     xhttp.send();
 }
 
+var tmp=[];
 function ajaxup(){
 	var formData = new FormData();
 	var file = document.getElementById('anexo').files[0];
@@ -183,7 +146,18 @@ function ajaxup(){
 
 	xhr.onreadystatechange = function(){
 		if (this.readyState == 4){
-			console.log("this.readyState:" + this.readyState + " status=" + this.status + " response=" + this.responseText);
+			
+					var d=document.createElement("div");
+					d.className="box img"
+					d.innerHTML="<img src=http://unip.now.im/files/" + JSON.parse(this.responseText) + ">";
+					document.getElementById('anexo').value="";
+					document.getElementById('chat').appendChild(d)
+					var div = document.getElementById("wrapper");
+					$('#wrapper').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
+					var res=JSON.parse(this.responseText);
+					if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
+			tmp=this;		
+			//console.log("this.readyState:" + this.readyState + " status=" + this.status + " response=" + this.responseText);
 		}
 
 	}

@@ -94,8 +94,21 @@ if($_GET['tipo']=="envio"){
   if($token->valido){
 
 
-try {
-    
+	try {
+		$uploads_dir = getcwd() . '/../files';
+		mkdir($uploads_dir);
+		foreach ($_FILES["file"]["error"] as $key => $error) {
+			if ($error == UPLOAD_ERR_OK) {
+				$tmp_name = $_FILES["file"]["tmp_name"][$key];
+				$name = basename($_FILES["file"]["name"][$key]);
+				// ajustar nome do arquivo
+				if(!move_uploaded_file($tmp_name, "$uploads_dir/$name")){
+					throw new RuntimeException('Erro no upload.');
+				}
+			}
+		}
+		//print_r($_SERVER);
+	// ideias::
     // Undefined | Multiple Files | $_FILES Corruption Attack
     // If this request falls under any of them, treat it invalid.
 /*    if (
@@ -142,17 +155,51 @@ try {
     // You should name it uniquely.
     // DO NOT USE $_FILES['file']['name'] WITHOUT ANY VALIDATION !!
     // On this example, obtain safe unique name from its binary data.
+	
+	/*
     if (!move_uploaded_file(
         $_FILES['file']['tmp_name'],
-        sprintf('./uploads/%s.%s',
+        sprintf('files/%s.%s',
             sha1_file($_FILES['file']['tmp_name']),
             $ext
         )
     )) {
         throw new RuntimeException('Failed to move uploaded file.');
     }
+	*/
+//move_uploaded_file($_FILES["file"]["tmp_name"], "/tmp/" . $_FILES["file"]["name"]);
+//rename($_FILES["file"]["tmp_name"], "/tmp/" . $_FILES["file"]["name"]);
+/*
+//  5MB maximum file size 
+$MAXIMUM_FILESIZE = 5 * 1024 * 1024; 
+//  Valid file extensions (images, word, excel, powerpoint) 
+$rEFileTypes = 
+  "/^\.(jpg|jpeg|gif|png|doc|docx|txt|rtf|pdf|xls|xlsx| 
+        ppt|pptx){1}$/i"; 
+$dir_base = "/server/apache/vhosts/unip.nunes.net.br/CC5/APS/unip-aps5/api/files/"; 
 
-$retorno = "Arquivo enviado";
+$isFile = is_uploaded_file($_FILES['file']['tmp_name']); 
+if ($isFile)    //  do we have a file? 
+   {//  sanatize file name 
+    //     - remove extra spaces/convert to _, 
+    //     - remove non 0-9a-Z._- characters, 
+    //     - remove leading/trailing spaces 
+    //  check if under 5MB, 
+    //  check file extension for legal file types 
+    $safe_filename = preg_replace( 
+                     array("/\s+/", "/[^-\.\w]+/"), 
+                     array("_", ""), 
+                     trim($_FILES['file']['name'])); 
+    if ($_FILES['file']['size'] <= $MAXIMUM_FILESIZE && 
+        preg_match($rEFileTypes, strrchr($safe_filename, '.'))) 
+      {$isMove = move_uploaded_file ( 
+                 $_FILES['file']['tmp_name'], 
+                 $dir_base.$safe_filename);} 
+      } 
+   
+
+*/
+$retorno = $name;
 
 //    echo 'File is uploaded successfully.';
 
@@ -160,7 +207,7 @@ $retorno = "Arquivo enviado";
 
 //    echo $e->getMessage();
 $retorno = Erro($e->getMessage());
-$retorno = Erro($_FILES);
+
 }
 
   }else{
