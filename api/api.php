@@ -107,7 +107,7 @@ if($_GET['tipo']=="envio"){
 				}
 			}
 		}
-
+/*
 		$hash = "";
 		
 		$cliente = new Cliente($token->id);
@@ -119,7 +119,7 @@ if($_GET['tipo']=="envio"){
 		$retorno = $chat->post();
 		$cliente->lastupdate=$retorno->lastupdate;
 		$cliente->atualizar();
-		
+*/		
 		  
 		//print_r($_SERVER);
 	// ideias::
