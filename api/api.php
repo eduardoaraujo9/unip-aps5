@@ -107,6 +107,20 @@ if($_GET['tipo']=="envio"){
 				}
 			}
 		}
+
+		$hash = "";
+		
+		$cliente = new Cliente($token->id);
+		$chat = new Chat();
+
+		$chat->cliente=$cliente->id;
+		$chat->tipo=2;
+		$chat->dados="http://unip.now.im/receber/" . $hash . "/" . $name;
+		$retorno = $chat->post();
+		$cliente->lastupdate=$retorno->lastupdate;
+		$cliente->atualizar();
+		
+		  
 		//print_r($_SERVER);
 	// ideias::
     // Undefined | Multiple Files | $_FILES Corruption Attack
@@ -199,7 +213,7 @@ if ($isFile)    //  do we have a file?
    
 
 */
-$retorno = $name;
+//$retorno = $name;
 
 //    echo 'File is uploaded successfully.';
 

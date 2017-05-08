@@ -6,7 +6,7 @@ class Chat {
   public $id;
   public $cliente;
   public $hora;
-  public $tipo;
+  public $tipo; // 0: msg ; 1: emoticon ; 2: arquivo
   public $dados;
 
   private $DAO;

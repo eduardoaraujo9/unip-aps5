@@ -144,29 +144,29 @@ function ajaxup(){
 
 	var xhr = new XMLHttpRequest();
 
-	xhr.onreadystatechange = function(){
+	xhttp.onreadystatechange = function(){
 		if (this.readyState == 4){
 			
-					var d=document.createElement("div");
-					d.className="box img"
-					d.innerHTML="<img src=http://unip.now.im/files/" + JSON.parse(this.responseText) + ">";
-					document.getElementById('anexo').value="";
-					document.getElementById('chat').appendChild(d)
-					var div = document.getElementById("wrapper");
-					$('#wrapper').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
-					var res=JSON.parse(this.responseText);
-					if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
+			var d=document.createElement("div");
+			d.className="box img me"
+			d.innerHTML="<img src=http://unip.now.im/files/" + JSON.parse(this.responseText) + ">";
+			document.getElementById('anexo').value="";
+			document.getElementById('chat').appendChild(d)
+			var div = document.getElementById("wrapper");
+			$('#wrapper').animate({scrollTop: div.scrollHeight - div.clientHeight}, 500);
+			var res=JSON.parse(this.responseText);
+			if(res.lastupdate>me.lastupdate){me.lastupdate=res.lastupdate}
 			debug=this;		
 			//console.log("this.readyState:" + this.readyState + " status=" + this.status + " response=" + this.responseText);
 		}
 
 	}
 
-	xhr.open('POST', api_url + "/envio?_=" + rnd(), true);
-    xhr.setRequestHeader("access_token",me.access_token);
-    xhr.setRequestHeader("Accept","application/json");
+	xhttp.open('POST', api_url + "/envio?_=" + rnd(), true);
+    xhttp.setRequestHeader("access_token",me.access_token);
+    xhttp.setRequestHeader("Accept","application/json");
 
-	xhr.send(formData);
+	xhttp.send(formData);
 
 }
 
@@ -205,11 +205,13 @@ function salvarPerfil(){
 }
 
 function fazerLogin(){
+	me={};
 	$('#login').modal({backdrop: 'static', keyboard: false});
 	clearInterval(atualizaChat);
 }
 
 function fazerPerfil(){
+	if(me.nome.length>0){document.getElementById('nomePerfil').value=me.nome;}
 	$('#profile').modal({backdrop: 'static', keyboard: false});
 }
 
@@ -221,7 +223,6 @@ function proximoReceber(){
 	else if(heat>1){atualizaChat=setTimeout(receber,2000)}
 	else{atualizaChat=setTimeout(receber,3000)}
 }
-
 
 function getCookie(cname) {
     var name = cname + "=";
