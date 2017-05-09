@@ -131,7 +131,7 @@ function getConfig(){
 			fazerLogin();
 		} else if (this.readyState == 4 && this.status == 200) {
 			res=JSON.parse(this.responseText);
-			if(res.nome.length>0){me.nome=res.nome;receber()}
+			if(res.nome.trim().length>0){me.nome=res.nome;receber()}
 			else{fazerPerfil()}
 			me.lastupdate=res.lastupdate;
 		}
