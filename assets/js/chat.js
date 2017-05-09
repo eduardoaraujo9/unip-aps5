@@ -43,8 +43,14 @@ function receber(){
 			if(!res.hasOwnProperty('lastupdate')){
 				for(i=0;i<res.length;i++){
 					var d=document.createElement("div");
+					//default:
 					d.className="box"
 					d.innerHTML="<p>" + res[i]["nome"] + ": " + res[i]["dados"];
+					if(res[i]["tipo"]==2){
+						d.className="box img"
+						d.innerHTML="<img src=" + res[i]["dados"] + ">";
+						d.addEventListener("click",lightbox);
+					}
 					document.getElementById('chat').appendChild(d)
 					//document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
 					me.lastupdate=res[i].lastupdate;
@@ -142,14 +148,17 @@ function ajaxup(){
 	var file = document.getElementById('anexo').files[0];
 	formData.append('file[]', file, file.name);
 
-	var xhr = new XMLHttpRequest();
+	var xhttp = new XMLHttpRequest();
 
 	xhttp.onreadystatechange = function(){
 		if (this.readyState == 4){
-			
+			res=JSON.parse(this.responseText);
 			var d=document.createElement("div");
 			d.className="box img me"
-			d.innerHTML="<img src=http://unip.now.im/files/" + JSON.parse(this.responseText) + ">";
+			d.innerHTML="<img src=" + res.dados + ">";
+			d.addEventListener("click",lightbox);
+			//function programaLightbox(){var a=document.querySelectorAll(".card .foto");for(i=0;i<a.length;i++){a[i].addEventListener("click",lightbox)}}
+
 			document.getElementById('anexo').value="";
 			document.getElementById('chat').appendChild(d)
 			var div = document.getElementById("wrapper");
@@ -239,6 +248,8 @@ function getCookie(cname) {
     }
     return "";
 }
+
+function lightbox(a){var b=document.getElementById("lightbox");if(b!=null){if(b.style.opacity=="0"||b.style.opacity==""){b.style.opacity=1;b.style.height="100%";b.style.top="0";b.children[0].src=this.children[0].src}else{b.style.opacity=0;window.setTimeout(lightboxOff,500)}}}function lightboxOff(){var a=document.getElementById("lightbox");a.style.height="0";a.style.top="-100px";a.children[0].src=""}
 
 
 window.onload=function(){

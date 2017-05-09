@@ -107,7 +107,7 @@ if($_GET['tipo']=="envio"){
 				}
 			}
 		}
-/*
+
 		$hash = "";
 		
 		$cliente = new Cliente($token->id);
@@ -115,11 +115,12 @@ if($_GET['tipo']=="envio"){
 
 		$chat->cliente=$cliente->id;
 		$chat->tipo=2;
-		$chat->dados="http://unip.now.im/receber/" . $hash . "/" . $name;
+		$chat->dados="http://unip.now.im/files/" . $hash . "/" . $name;
 		$retorno = $chat->post();
 		$cliente->lastupdate=$retorno->lastupdate;
 		$cliente->atualizar();
-*/		
+		$retorno->tipo=$chat->tipo;
+		$retorno->dados=$chat->dados;
 		  
 		//print_r($_SERVER);
 	// ideias::
@@ -213,7 +214,8 @@ if ($isFile)    //  do we have a file?
    
 
 */
-$retorno = $name;
+
+//$retorno = $name;
 
 //    echo 'File is uploaded successfully.';
 
@@ -229,6 +231,21 @@ $retorno = Erro($e->getMessage());
   }
 }
 
+
+/* Receber */
+
+if($_GET['tipo']=="receber" && strlen($id)>0 && strlen($parm)>0){
+	$parm = explode("/", $parm);
+	if(isset($parm[1])){
+		$parm=$parm[1];
+		$retorno= [ 
+			'hash' => $id,
+			'file' => $parm
+		];
+	}else{
+		$retorno=Erro("file not found");
+	}
+}
 
 /* Limpar possiveis respostas de uso interno */
 unset($retorno->existe);
