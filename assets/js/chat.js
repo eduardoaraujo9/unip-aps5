@@ -87,6 +87,7 @@ function loginErro(){
 }
 
 var me={};
+me.nome="";
 me.access_token=getCookie("access_token");
 var atualizaChat="";
 var sending=false;
@@ -98,7 +99,8 @@ function rnd(){
 }
 
 function login(){
-	me={}
+	me={};
+	me.nome="";
 	me.email=document.getElementById('username').value;
 	me.senha=document.getElementById('password').value;
 	var xhttp = new XMLHttpRequest();
@@ -215,8 +217,9 @@ function salvarPerfil(){
 
 function fazerLogin(){
 	me={};
+	me.nome="";
 	$('#login').modal({backdrop: 'static', keyboard: false});
-	clearInterval(atualizaChat);
+	clearTimeout(atualizaChat);
 }
 
 function fazerPerfil(){
