@@ -9,9 +9,11 @@ function enviar(){
 					fazerLogin();
 					enviar();
 				} else if (this.readyState == 4 && this.status == 200) {
+					var res=JSON.parse(this.responseText);
 					var d=document.createElement("div");
 					d.className="box me"
-					d.innerHTML="<p>" + document.getElementById('textInput').value;
+					d.innerHTML="<p class=dt><i>Você @ " + res["hora"] + "</i>";
+					d.innerHTML+="<p>" + document.getElementById('textInput').value;
 					document.getElementById('textInput').value = "";
 					document.getElementById('chat').appendChild(d)
 					var div = document.getElementById("wrapper");
@@ -45,12 +47,17 @@ function receber(){
 					var d=document.createElement("div");
 					//default:
 					d.className="box"
-					d.innerHTML="<p>" + res[i]["nome"] + ": " + res[i]["dados"];
+					d.innerHTML="<p class=dt>" + res[i]["nome"] + " @ " + res[i]["hora"];
 					if(res[i]["tipo"]==2){
-						d.className="box img"
-						d.innerHTML="<img src=" + res[i]["dados"] + ">";
-						d.addEventListener("click",lightbox);
+						d.className+=" img"
+						d.innerHTML+="<p><img src=" + res[i]["dados"] + ">";
+						d.addEventListener("click",function(){lightbox(this)});
+					}else if(res[i]["tipo"]==3){
+						d.innerHTML+="<p><a href='" + res[i]["dados"] + "' target=_blank><i class='glyphicon glyphicon-download'></i> " + res[i]["dados"].split('/').pop() + "</a>";
+					}else{
+						d.innerHTML+="<p>" + res[i]["dados"];
 					}
+					
 					document.getElementById('chat').appendChild(d)
 					//document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
 					me.lastupdate=res[i].lastupdate;
@@ -156,11 +163,17 @@ function ajaxup(){
 		if (this.readyState == 4){
 			res=JSON.parse(this.responseText);
 			var d=document.createElement("div");
-			d.className="box img me"
-			d.innerHTML="<img src=" + res.dados + ">";
-			d.addEventListener("click",lightbox);
-			//function programaLightbox(){var a=document.querySelectorAll(".card .foto");for(i=0;i<a.length;i++){a[i].addEventListener("click",lightbox)}}
-
+			d.className="box me"
+			d.innerHTML="<p class=dt><i>Você @ " + res["hora"] + "</i>";
+			if(res["tipo"]==2){
+				d.className+=" img"
+				d.innerHTML+="<p><img src=" + res["dados"] + ">";
+				d.addEventListener("click",function(){lightbox(this)});
+			}else if(res["tipo"]==3){
+				d.innerHTML+="<p><a href='" + res["dados"] + "' target=_blank><i class='glyphicon glyphicon-download'></i> " + res["dados"].split('/').pop() + "</a>";
+			}else{
+				d.innerHTML+="<p>" + res["dados"];
+			}
 			document.getElementById('anexo').value="";
 			document.getElementById('chat').appendChild(d)
 			var div = document.getElementById("wrapper");
@@ -252,7 +265,7 @@ function getCookie(cname) {
     return "";
 }
 
-function lightbox(a){var b=document.getElementById("lightbox");if(b!=null){if(b.style.opacity=="0"||b.style.opacity==""){b.style.opacity=1;b.style.height="100%";b.style.top="0";b.children[0].src=this.children[0].src}else{b.style.opacity=0;window.setTimeout(lightboxOff,500)}}}function lightboxOff(){var a=document.getElementById("lightbox");a.style.height="0";a.style.top="-100px";a.children[0].src=""}
+function lightbox(a){var b=document.getElementById("lightbox");if(b!=null){if(b.style.opacity=="0"||b.style.opacity==""){b.style.opacity=1;b.style.height="100%";b.style.top="0";b.children[0].src=a.children[1].children[0].src}else{b.style.opacity=0;window.setTimeout(lightboxOff,500)}}}function lightboxOff(){var a=document.getElementById("lightbox");a.style.height="0";a.style.top="-100px";a.children[0].src=""}
 
 
 window.onload=function(){
